@@ -1,0 +1,71 @@
+\definecolor{segserver}{HTML}{D55E00}
+\definecolor{segjetson}{HTML}{0072B2}
+\definecolor{segcpu}{HTML}{CC79A7}
+\definecolor{segnpu}{HTML}{009E73}
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=3 by 1, horizontal sep=0.35cm,
+    ylabels at=edge left, yticklabels at=edge left},
+  width=0.345\textwidth, height=0.18\textwidth,
+  xmode=log, ymode=log,
+  xlabel={p95 latency (ms)}, ylabel={Marginal wall energy (J/inf.)},
+  xmin=4.1, xmax=342, ymin=0.0069, ymax=1.614,
+  ymajorgrids=true, grid style={black!10},
+  title style={font=\footnotesize, yshift=-2pt},
+  label style={font=\footnotesize}, tick label style={font=\scriptsize},
+]
+\nextgroupplot[title={MobileNet-V2 0.5}]
+\addplot[draw=none, fill=black!6, forget plot] coordinates {(100,0.0069) (342,0.0069) (342,1.614) (100,1.614)} \closedcycle;
+\draw[dashed, black!55, line width=0.7pt] (axis cs:100,0.0069) -- (axis cs:100,1.614);
+\addplot[only marks, mark=*, mark size=0.5pt, color=segserver, fill=segserver, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(19.6,0.0563) (20.6,0.0531) (19.9,0.0450) (19.6,0.0513) (19.8,0.0526) (20.4,0.0495) (19.8,0.0551) (20.1,0.0524) (20.1,0.0599) (20.4,0.0695) (20.1,0.0771) (20.0,0.0890)};
+\addplot[only marks, mark=*, mark size=1.0pt, color=segserver, fill=segserver, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(20.0,0.0691) (20.5,0.0626) (21.2,0.0563) (22.0,0.0544) (21.9,0.0567) (22.0,0.0564) (21.9,0.0611) (22.0,0.0597) (22.1,0.0674) (23.4,0.0745) (22.2,0.0822) (22.8,0.0974)};
+\addplot[only marks, mark=*, mark size=1.7pt, color=segserver, fill=segserver, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(23.6,0.0903) (20.0,0.0683) (19.8,0.0616) (22.2,0.0568) (21.5,0.0583) (21.8,0.0581) (22.0,0.0603) (21.6,0.0624) (22.1,0.0688) (21.9,0.0788) (22.0,0.0866) (22.5,0.1059)};
+\addplot[only marks, mark=*, mark size=2.5pt, color=segserver, fill=segserver, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(62.3,0.1011) (52.3,0.0699) (31.3,0.0605) (29.6,0.0559) (36.4,0.0581) (93.1,0.0561) (35.5,0.0608) (74.8,0.0615) (37.8,0.0692) (184.0,0.0780) (92.9,0.0862) (44.5,0.1078)};
+\addplot[only marks, mark=*, mark size=0.5pt, color=segjetson, fill=segjetson, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(20.1,0.0391) (27.2,0.0329) (7.3,0.0159) (12.2,0.0120) (9.2,0.0101) (8.4,0.0123) (5.8,0.0088) (5.1,0.0091) (4.8,0.0098) (10.0,0.0098) (12.5,0.0268) (12.3,0.0254) (11.9,0.0245) (14.3,0.0198) (13.6,0.0191) (13.6,0.0255) (11.8,0.0257) (11.9,0.0248) (11.7,0.0244)};
+\addplot[only marks, mark=*, mark size=1.0pt, color=segjetson, fill=segjetson, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(25.4,0.0441) (34.3,0.0414) (8.4,0.0155) (15.8,0.0114) (11.5,0.0096) (10.0,0.0116) (7.5,0.0086) (6.2,0.0088) (5.8,0.0093) (12.4,0.0091) (17.4,0.0237) (15.5,0.0234) (15.6,0.0234) (19.6,0.0192) (17.4,0.0189) (17.8,0.0240) (15.9,0.0249) (15.5,0.0244) (15.0,0.0244)};
+\addplot[only marks, mark=*, mark size=1.7pt, color=segjetson, fill=segjetson, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(37.5,0.0464) (47.0,0.0347) (12.3,0.0150) (24.8,0.0111) (16.3,0.0094) (14.3,0.0112) (11.2,0.0083) (9.7,0.0085) (9.1,0.0090) (20.1,0.0089) (26.4,0.0238) (24.2,0.0231) (23.7,0.0230) (31.6,0.0187) (26.0,0.0184) (26.1,0.0231) (24.1,0.0245) (24.1,0.0235) (23.0,0.0230)};
+\addplot[only marks, mark=*, mark size=2.5pt, color=segjetson, fill=segjetson, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(72.1,0.0478) (76.9,0.0330) (94.6,0.0148) (81.4,0.0109) (75.7,0.0090) (52.0,0.0109) (44.5,0.0082) (40.6,0.0083) (49.8,0.0087) (66.6,0.0086) (72.2,0.0235) (81.1,0.0229) (81.8,0.0227) (87.2,0.0184) (61.2,0.0180) (86.7,0.0231) (64.2,0.0238) (73.3,0.0231) (93.2,0.0231)};
+\addplot[only marks, mark=*, mark size=0.5pt, color=segcpu, fill=segcpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(12.8,0.1825) (35.5,0.1623) (36.9,0.1032)};
+\addplot[only marks, mark=*, mark size=1.0pt, color=segcpu, fill=segcpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(17.6,0.1221) (37.8,0.1301) (45.1,0.1041)};
+\addplot[only marks, mark=*, mark size=1.7pt, color=segcpu, fill=segcpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(26.4,0.1029) (43.2,0.1111) (57.1,0.1039)};
+\addplot[only marks, mark=*, mark size=2.5pt, color=segcpu, fill=segcpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(62.9,0.0846) (72.4,0.0985) (86.6,0.1054)};
+\addplot[only marks, mark=*, mark size=0.5pt, color=segnpu, fill=segnpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(39.6,0.0145)};
+\addplot[only marks, mark=*, mark size=1.0pt, color=segnpu, fill=segnpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(33.6,0.0130)};
+\addplot[only marks, mark=*, mark size=1.7pt, color=segnpu, fill=segnpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(31.4,0.0116)};
+\addplot[only marks, mark=*, mark size=2.5pt, color=segnpu, fill=segnpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(86.3,0.0108)};
+\nextgroupplot[title={MobileNet-V2 1.0}]
+\addplot[draw=none, fill=black!6, forget plot] coordinates {(100,0.0069) (342,0.0069) (342,1.614) (100,1.614)} \closedcycle;
+\draw[dashed, black!55, line width=0.7pt] (axis cs:100,0.0069) -- (axis cs:100,1.614);
+\addplot[only marks, mark=*, mark size=0.5pt, color=segserver, fill=segserver, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(19.9,0.0752) (20.7,0.0700) (20.9,0.0696) (21.3,0.0724) (19.9,0.0670) (21.4,0.0680) (21.2,0.0672) (20.6,0.0725) (20.4,0.0887) (20.4,0.0971) (20.4,0.1173) (20.1,0.1237)};
+\addplot[only marks, mark=*, mark size=1.0pt, color=segserver, fill=segserver, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(21.3,0.1056) (20.4,0.0899) (21.6,0.0835) (22.0,0.0786) (21.4,0.0773) (22.8,0.0750) (23.2,0.0752) (22.2,0.0842) (22.6,0.0976) (22.4,0.1056) (22.8,0.1297) (22.4,0.1404)};
+\addplot[only marks, mark=*, mark size=1.7pt, color=segserver, fill=segserver, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(27.1,0.1392) (20.4,0.0979) (20.1,0.0857) (20.9,0.0784) (20.3,0.0811) (23.2,0.0746) (22.9,0.0795) (22.7,0.0862) (23.0,0.1023) (22.1,0.1082) (22.3,0.1418) (22.7,0.1528)};
+\addplot[only marks, mark=*, mark size=2.5pt, color=segserver, fill=segserver, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(65.5,0.1467) (42.8,0.1022) (45.7,0.0874) (39.4,0.0794) (55.9,0.0798) (317.0,0.0734) (85.6,0.0783) (34.3,0.0858) (37.3,0.1020) (39.5,0.1091) (60.6,0.1604) (39.9,0.1633)};
+\addplot[only marks, mark=*, mark size=0.5pt, color=segjetson, fill=segjetson, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(29.8,0.0678) (41.3,0.0755) (7.7,0.0235) (14.4,0.0186) (10.0,0.0153) (8.7,0.0180) (7.6,0.0160) (6.3,0.0162) (6.0,0.0170) (13.0,0.0185) (13.9,0.0421) (13.9,0.0405) (13.7,0.0411) (16.1,0.0345) (15.6,0.0317) (17.3,0.0429) (13.2,0.0422) (13.3,0.0415) (13.3,0.0423)};
+\addplot[only marks, mark=*, mark size=1.0pt, color=segjetson, fill=segjetson, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(39.2,0.0783) (50.3,0.0708) (8.9,0.0231) (19.1,0.0178) (13.0,0.0147) (10.5,0.0178) (9.4,0.0154) (8.3,0.0155) (7.9,0.0166) (17.8,0.0163) (18.6,0.0409) (17.7,0.0400) (17.1,0.0405) (21.1,0.0322) (19.6,0.0320) (22.8,0.0404) (17.5,0.0418) (16.9,0.0409) (16.9,0.0406)};
+\addplot[only marks, mark=*, mark size=1.7pt, color=segjetson, fill=segjetson, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(53.0,0.0844) (64.6,0.0644) (12.9,0.0229) (28.4,0.0180) (19.8,0.0141) (15.0,0.0173) (14.6,0.0149) (12.9,0.0153) (12.9,0.0163) (27.6,0.0160) (30.3,0.0413) (25.8,0.0396) (25.0,0.0399) (31.4,0.0321) (28.3,0.0309) (33.6,0.0390) (26.6,0.0403) (25.5,0.0401) (25.6,0.0396)};
+\addplot[only marks, mark=*, mark size=2.5pt, color=segjetson, fill=segjetson, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(81.6,0.0869) (90.0,0.0643) (68.2,0.0227) (75.0,0.0176) (81.3,0.0140) (44.8,0.0171) (48.2,0.0147) (55.1,0.0151) (126.3,0.0161) (89.9,0.0158) (81.5,0.0407) (71.4,0.0395) (73.3,0.0392) (75.9,0.0313) (55.5,0.0307) (104.9,0.0386) (66.1,0.0401) (72.2,0.0399) (75.2,0.0399)};
+\addplot[only marks, mark=*, mark size=0.5pt, color=segcpu, fill=segcpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(27.1,0.4890) (52.5,0.2837) (61.1,0.2023)};
+\addplot[only marks, mark=*, mark size=1.0pt, color=segcpu, fill=segcpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(33.5,0.3249) (56.8,0.2451) (71.0,0.2054)};
+\addplot[only marks, mark=*, mark size=1.7pt, color=segcpu, fill=segcpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(42.5,0.2690) (65.9,0.2239) (84.1,0.2085)};
+\addplot[only marks, mark=*, mark size=2.5pt, color=segcpu, fill=segcpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(76.0,0.2336) (82.5,0.2046) (92.0,0.2113)};
+\addplot[only marks, mark=*, mark size=0.5pt, color=segnpu, fill=segnpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(41.3,0.0215)};
+\addplot[only marks, mark=*, mark size=1.0pt, color=segnpu, fill=segnpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(51.0,0.0190)};
+\addplot[only marks, mark=*, mark size=1.7pt, color=segnpu, fill=segnpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(54.9,0.0168)};
+\addplot[only marks, mark=*, mark size=2.5pt, color=segnpu, fill=segnpu, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(78.6,0.0152)};
+\nextgroupplot[title={EfficientNet-B4}]
+\addplot[draw=none, fill=black!6, forget plot] coordinates {(100,0.0069) (342,0.0069) (342,1.614) (100,1.614)} \closedcycle;
+\draw[dashed, black!55, line width=0.7pt] (axis cs:100,0.0069) -- (axis cs:100,1.614);
+\addplot[only marks, mark=*, mark size=0.5pt, color=segserver, fill=segserver, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(40.1,1.2475) (40.8,0.5626) (38.5,0.5455) (39.4,0.5150) (38.7,0.5010) (37.9,0.4870) (38.9,0.5288) (39.4,0.5826) (39.0,0.6855) (39.0,0.8131) (38.6,1.0810) (38.9,1.1944)};
+\addplot[only marks, mark=*, mark size=1.0pt, color=segserver, fill=segserver, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(56.3,0.9484) (47.2,0.6379) (43.0,0.5950) (41.2,0.5558) (40.7,0.5522) (39.2,0.5253) (38.3,0.5539) (38.3,0.6239) (38.1,0.7533) (38.0,0.9148) (38.0,1.4248) (37.8,1.3894)};
+\addplot[only marks, mark=*, mark size=1.7pt, color=segserver, fill=segserver, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(60.6,0.8698) (61.1,0.6717) (54.7,0.6413) (46.6,0.5792) (48.2,0.5746) (44.9,0.5468) (41.1,0.5872) (41.4,0.6651) (39.0,0.8182) (39.4,1.0870) (42.2,1.4670) (40.0,1.3999)};
+\addplot[only marks, mark=*, mark size=2.5pt, color=segserver, fill=segserver, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(64.8,0.8628) (92.0,0.7045) (101.1,0.6527) (81.6,0.5862) (90.2,0.5936) (105.9,0.5636) (68.7,0.6004) (69.9,0.6913) (51.0,0.9076) (65.2,1.1061) (141.7,1.2181) (97.8,1.1838)};
+\addplot[only marks, mark=*, mark size=0.5pt, color=segjetson, fill=segjetson, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(23.4,0.3061) (72.7,0.2553) (47.0,0.2189) (30.3,0.2297) (48.8,0.2427) (44.5,0.2435) (41.3,0.2631) (62.4,0.2401) (61.6,0.6130) (63.4,0.6269) (59.8,0.6214) (59.7,0.4707) (62.2,0.4989) (73.0,0.9025) (49.3,0.6003) (62.8,0.6085) (65.8,0.6030)};
+\addplot[only marks, mark=*, mark size=1.0pt, color=segjetson, fill=segjetson, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(30.2,0.3019) (78.4,0.2658) (55.3,0.2229) (36.6,0.2346) (58.8,0.2389) (55.2,0.2394) (48.3,0.2576) (64.1,0.2712) (78.1,0.6067) (78.2,0.5991) (79.9,0.5979) (87.4,0.5019) (83.7,0.5033) (73.2,0.7371) (68.8,0.5856) (74.1,0.5902) (77.7,0.5913)};
+\addplot[only marks, mark=*, mark size=1.7pt, color=segjetson, fill=segjetson, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(43.1,0.3031) (89.6,0.2508) (70.0,0.2192) (48.9,0.2368) (70.9,0.2413) (71.0,0.2416) (68.4,0.2544) (80.9,0.2786) (82.6,0.6052) (83.9,0.5963) (87.0,0.5986) (95.3,0.4613) (95.7,0.4728) (84.2,0.5909) (79.9,0.5885) (82.8,0.5964) (87.1,0.5920)};
+\addplot[only marks, mark=*, mark size=2.5pt, color=segjetson, fill=segjetson, fill opacity=0.55, draw opacity=0.55, forget plot] coordinates {(78.1,0.3056) (99.4,0.2508) (90.6,0.2208) (71.6,0.2341) (95.9,0.2322) (109.2,0.2421) (92.2,0.2561) (94.0,0.2705) (88.9,0.5994) (91.8,0.5884) (102.5,0.5912) (100.8,0.4745) (98.6,0.4744) (98.1,0.6197) (85.9,0.5831) (93.8,0.5929) (104.1,0.5946)};
+\end{groupplot}
+\end{tikzpicture}
+\par\vspace{1pt}
+{\footnotesize \textcolor{segserver}{$\bullet$}\,Server \quad \textcolor{segjetson}{$\bullet$}\,Jetson \quad \textcolor{segnpu}{$\bullet$}\,Small-board NPU \quad \textcolor{segcpu}{$\bullet$}\,Small-board CPU}
+\par\vspace{1pt}
+{\footnotesize marker size $=$ load (fraction of capacity): \tikz[baseline=-0.5ex]\draw[fill=black] (0,0) circle (0.5pt);\,0.25 \quad \tikz[baseline=-0.5ex]\draw[fill=black] (0,0) circle (1.0pt);\,0.5 \quad \tikz[baseline=-0.5ex]\draw[fill=black] (0,0) circle (1.7pt);\,0.75 \quad \tikz[baseline=-0.5ex]\draw[fill=black] (0,0) circle (2.5pt);\,1}

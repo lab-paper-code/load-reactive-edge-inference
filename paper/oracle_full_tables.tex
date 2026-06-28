@@ -1,0 +1,265 @@
+\documentclass[10pt]{article}
+\usepackage[landscape,margin=1cm]{geometry}
+\usepackage{longtable,booktabs,array,xcolor}
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.05}
+\begin{document}
+\section*{Full result tables (working artifact)}
+\noindent Generated from official derived artifacts with no re-derivation. Deadline p95 $\le 100$\,ms; loads $\{0.25,0.5,0.75,1.0\}$; wall-plug marginal energy. $\dagger$ = SLA-unsafe (p95 over deadline). Table~A load = fraction of each mode's own capacity (raw measurement); Table~B load = fraction of the group's max capacity (the oracle-sheet axis).\par\medskip
+\begin{center}\tiny
+\setlength{\tabcolsep}{2pt}
+\begin{longtable}{@{}l l r r r l l r r l r r l r r r l@{}}
+\caption{Table B. Full oracle decision grid: every device--model group at four external request loads (fraction of the group's max capacity, the figure's load axis). \emph{feasible} counts modes whose capacity sustains the demand; \emph{SLA-safe} counts those that also keep p95 $\le 100$\,ms (the oracle chooses among SLA-safe modes, so a genuine choice exists where SLA-safe $> 1$). For the oracle, the maximum-performance proxy, and the capacity-only proxy the table lists mode, estimated J/inf and p95 (ms); regret is the oracle's energy saving over the max-performance proxy. $\dagger$ marks an SLA-unsafe selection (p95 over 100\,ms); $\star$ marks a group whose oracle mode changes with load. Source: \texttt{scheduler\_policy\_eval.csv}, 22 groups $\times$ 4 loads = 88 rows.}\\
+\toprule
+& & \multicolumn{3}{c}{modes} & \multicolumn{4}{c}{Oracle (feasible min-energy)} & \multicolumn{3}{c}{Max-performance proxy} & \multicolumn{3}{c}{Capacity-only proxy} & & \\
+\cmidrule(lr){3-5}\cmidrule(lr){6-9}\cmidrule(lr){10-12}\cmidrule(lr){13-15}
+Device / Model & Load & modes & feasible & SLA-safe & mode & category & J/inf & p95 (ms) & mode & J/inf & p95 (ms) & mode & J/inf & p95 (ms) & regret vs max-perf & robustness \\
+\midrule\endfirsthead
+\toprule
+& & \multicolumn{3}{c}{modes} & \multicolumn{4}{c}{Oracle (feasible min-energy)} & \multicolumn{3}{c}{Max-performance proxy} & \multicolumn{3}{c}{Capacity-only proxy} & & \\
+\cmidrule(lr){3-5}\cmidrule(lr){6-9}\cmidrule(lr){10-12}\cmidrule(lr){13-15}
+Device / Model & Load & modes & feasible & SLA-safe & mode & category & J/inf & p95 (ms) & mode & J/inf & p95 (ms) & mode & J/inf & p95 (ms) & regret vs max-perf & robustness \\
+\midrule\endhead
+GPU Server / efficientnet-b4$\star$ & 0.25 & 12 & 11 & 11 & 1200MHz & intermediate & 0.498 & 38 & 1800MHz & 0.822 & 39 & 420MHz & 0.680 & 66 & 39.4\% & margin\_gt\_iqr \\
+ & 0.50 & 12 & 9 & 9 & 1200MHz & intermediate & 0.534 & 41 & 1800MHz & 0.908 & 38 & 810MHz & 0.582 & 65 & 41.3\% & margin\_gt\_iqr \\
+ & 0.75 & 12 & 7 & 7 & 1200MHz & intermediate & 0.555 & 79 & 1800MHz & 1.084 & 39 & 1200MHz & 0.555 & 79 & 48.8\% & margin\_gt\_iqr \\
+ & 1.00 & 12 & 1 & 1 & 1800MHz & intermediate & 1.104 & 65 & 1800MHz & 1.104 & 65 & 1800MHz & 1.104 & 65 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+GPU Server / mobilenet-v2-050$\star$ & 0.25 & 12 & 12 & 12 & 1200MHz & intermediate & 0.049 & 20 & 1200MHz & 0.049 & 20 & 300MHz & 0.084 & 22 & 0.0\% & margin\_within\_iqr \\
+ & 0.50 & 12 & 11 & 11 & 810MHz & intermediate & 0.056 & 22 & 1200MHz & 0.056 & 22 & 420MHz & 0.068 & 20 & 1.3\% & margin\_within\_iqr \\
+ & 0.75 & 12 & 10 & 10 & 810MHz & intermediate & 0.056 & 25 & 1200MHz & 0.058 & 22 & 600MHz & 0.061 & 28 & 2.4\% & margin\_gt\_iqr \\
+ & 1.00 & 12 & 1 & 1 & 1200MHz & intermediate & 0.056 & 93 & 1200MHz & 0.056 & 93 & 1200MHz & 0.056 & 93 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+GPU Server / mobilenet-v2-100$\star$ & 0.25 & 12 & 12 & 12 & 1410MHz & intermediate & 0.067 & 21 & 1905MHz & 0.117 & 20 & 300MHz & 0.144 & 46 & 42.6\% & margin\_within\_iqr \\
+ & 0.50 & 12 & 11 & 11 & 1200MHz & intermediate & 0.075 & 23 & 1905MHz & 0.129 & 23 & 420MHz & 0.101 & 39 & 41.9\% & margin\_within\_iqr \\
+ & 0.75 & 12 & 9 & 9 & 1200MHz & intermediate & 0.075 & 23 & 1905MHz & 0.142 & 22 & 810MHz & 0.079 & 34 & 47.3\% & margin\_gt\_iqr \\
+ & 1.00 & 12 & 2 & 1 & 1905MHz & intermediate & 0.160 & 61 & 1905MHz & 0.160 & 61 & 1200MHz & 0.074 & 317\,$\dagger$ & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+Jetson Nano / mobilenet-v2-050$\star$ & 0.25 & 2 & 2 & 2 & 5W & lowest & 0.039 & 31 & MAXN & 0.039 & 20 & 5W & 0.039 & 31 & 1.0\% & margin\_within\_iqr \\
+ & 0.50 & 2 & 2 & 2 & 5W & lowest & 0.035 & 50 & MAXN & 0.044 & 25 & 5W & 0.035 & 50 & 21.4\% & margin\_gt\_iqr \\
+ & 0.75 & 2 & 1 & 1 & MAXN & max & 0.046 & 37 & MAXN & 0.046 & 37 & MAXN & 0.046 & 37 & 0.0\% & only\_one\_safe\_mode \\
+ & 1.00 & 2 & 1 & 1 & MAXN & max & 0.047 & 72 & MAXN & 0.047 & 72 & MAXN & 0.047 & 72 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+Jetson Nano / mobilenet-v2-100$\star$ & 0.25 & 2 & 2 & 2 & MAXN & max & 0.068 & 30 & MAXN & 0.068 & 30 & 5W & 0.071 & 46 & 0.0\% & margin\_within\_iqr \\
+ & 0.50 & 2 & 2 & 2 & 5W & lowest & 0.064 & 67 & MAXN & 0.078 & 39 & 5W & 0.064 & 67 & 18.3\% & margin\_gt\_iqr \\
+ & 0.75 & 2 & 1 & 1 & MAXN & max & 0.085 & 53 & MAXN & 0.085 & 53 & MAXN & 0.085 & 53 & 0.0\% & only\_one\_safe\_mode \\
+ & 1.00 & 2 & 1 & 1 & MAXN & max & 0.086 & 82 & MAXN & 0.086 & 82 & MAXN & 0.086 & 82 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+AGX Orin / efficientnet-b4$\star$ & 0.25 & 4 & 3 & 3 & MODE\_30W & intermediate & 0.220 & 79 & MAXN & 0.312 & 23 & MODE\_30W & 0.220 & 79 & 29.6\% & margin\_gt\_iqr \\
+ & 0.50 & 4 & 2 & 2 & MODE\_50W & intermediate & 0.239 & 53 & MAXN & 0.303 & 30 & MODE\_50W & 0.239 & 53 & 21.1\% & margin\_gt\_iqr \\
+ & 0.75 & 4 & 1 & 1 & MAXN & max & 0.305 & 43 & MAXN & 0.305 & 43 & MAXN & 0.305 & 43 & 0.0\% & only\_one\_safe\_mode \\
+ & 1.00 & 4 & 1 & 1 & MAXN & max & 0.304 & 78 & MAXN & 0.304 & 78 & MAXN & 0.304 & 78 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+AGX Orin / mobilenet-v2-050$\star$ & 0.25 & 4 & 4 & 4 & MODE\_30W & intermediate & 0.010 & 11 & MAXN & 0.016 & 7 & MODE\_15W & 0.011 & 35 & 38.7\% & margin\_gt\_iqr \\
+ & 0.50 & 4 & 3 & 3 & MODE\_30W & intermediate & 0.009 & 57 & MAXN & 0.016 & 8 & MODE\_30W & 0.009 & 57 & 41.7\% & margin\_gt\_iqr \\
+ & 0.75 & 4 & 1 & 1 & MAXN & max & 0.015 & 12 & MAXN & 0.015 & 12 & MAXN & 0.015 & 12 & 0.0\% & only\_one\_safe\_mode \\
+ & 1.00 & 4 & 1 & 1 & MAXN & max & 0.015 & 95 & MAXN & 0.015 & 95 & MAXN & 0.015 & 95 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+AGX Orin / mobilenet-v2-100$\star$ & 0.25 & 4 & 4 & 4 & MODE\_30W & intermediate & 0.015 & 13 & MAXN & 0.024 & 8 & MODE\_15W & 0.018 & 59 & 37.6\% & margin\_gt\_iqr \\
+ & 0.50 & 4 & 3 & 3 & MODE\_30W & intermediate & 0.014 & 76 & MAXN & 0.023 & 9 & MODE\_30W & 0.014 & 76 & 39.5\% & margin\_gt\_iqr \\
+ & 0.75 & 4 & 1 & 1 & MAXN & max & 0.023 & 13 & MAXN & 0.023 & 13 & MAXN & 0.023 & 13 & 0.0\% & only\_one\_safe\_mode \\
+ & 1.00 & 4 & 1 & 1 & MAXN & max & 0.023 & 68 & MAXN & 0.023 & 68 & MAXN & 0.023 & 68 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+Orin Nano / efficientnet-b4$\star$ & 0.25 & 4 & 3 & 3 & 25W & intermediate & 0.235 & 45 & 25W & 0.235 & 45 & 15W & 0.235 & 54 & 0.0\% & margin\_within\_iqr \\
+ & 0.50 & 4 & 3 & 3 & 15W & intermediate & 0.236 & 74 & 25W & 0.239 & 55 & 15W & 0.236 & 74 & 1.2\% & margin\_within\_iqr \\
+ & 0.75 & 4 & 2 & 2 & 25W & intermediate & 0.240 & 71 & 25W & 0.240 & 71 & MAXN\_SUPER & 0.255 & 70 & 0.0\% & margin\_gt\_iqr \\
+ & 1.00 & 4 & 1 & 0 & \textcolor{gray}{none} &  & -- & --\,$\dagger$ & 25W & 0.243 & 109\,$\dagger$ & 25W & 0.243 & 109\,$\dagger$ & -- & no\_decision \\
+\addlinespace[2pt]
+Orin Nano / mobilenet-v2-050$\star$ & 0.25 & 4 & 4 & 4 & 15W & intermediate & 0.009 & 6 & MAXN\_SUPER & 0.010 & 5 & 7W & 0.009 & 16 & 10.8\% & margin\_gt\_iqr \\
+ & 0.50 & 4 & 3 & 3 & 15W & intermediate & 0.008 & 10 & MAXN\_SUPER & 0.009 & 6 & 15W & 0.008 & 10 & 10.3\% & margin\_gt\_iqr \\
+ & 0.75 & 4 & 2 & 2 & 25W & intermediate & 0.008 & 16 & MAXN\_SUPER & 0.009 & 9 & 25W & 0.008 & 16 & 5.7\% & margin\_gt\_iqr \\
+ & 1.00 & 4 & 1 & 1 & MAXN\_SUPER & max & 0.009 & 50 & MAXN\_SUPER & 0.009 & 50 & MAXN\_SUPER & 0.009 & 50 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+Orin Nano / mobilenet-v2-100$\star$ & 0.25 & 4 & 4 & 4 & 15W & intermediate & 0.016 & 8 & MAXN\_SUPER & 0.017 & 6 & 7W & 0.016 & 26 & 8.4\% & margin\_within\_iqr \\
+ & 0.50 & 4 & 3 & 3 & 15W & intermediate & 0.015 & 14 & MAXN\_SUPER & 0.017 & 8 & 15W & 0.015 & 14 & 9.2\% & margin\_within\_iqr \\
+ & 0.75 & 4 & 2 & 2 & 25W & intermediate & 0.015 & 26 & MAXN\_SUPER & 0.016 & 13 & 25W & 0.015 & 26 & 6.7\% & margin\_gt\_iqr \\
+ & 1.00 & 4 & 1 & 0 & \textcolor{gray}{none} &  & -- & --\,$\dagger$ & MAXN\_SUPER & 0.016 & 126\,$\dagger$ & MAXN\_SUPER & 0.016 & 126\,$\dagger$ & -- & no\_decision \\
+\addlinespace[2pt]
+Xavier NX / efficientnet-b4$\star$ & 0.25 & 9 & 8 & 8 & MODE\_10W\_4CORE & intermediate & 0.466 & 84 & MODE\_20W\_6CORE & 0.621 & 66 & MODE\_10W\_4CORE & 0.466 & 84 & 24.9\% & margin\_within\_iqr \\
+ & 0.50 & 9 & 7 & 6 & MODE\_20W\_4CORE & intermediate & 0.578 & 76 & MODE\_20W\_6CORE & 0.594 & 78 & MODE\_10W\_2CORE & 0.458 & 100\,$\dagger$ & 2.8\% & margin\_within\_iqr \\
+ & 0.75 & 9 & 5 & 5 & MODE\_15W\_6CORE & intermediate & 0.578 & 95 & MODE\_20W\_6CORE & 0.612 & 87 & MODE\_15W\_4CORE & 0.603 & 90 & 5.6\% & margin\_within\_iqr \\
+ & 1.00 & 9 & 1 & 0 & \textcolor{gray}{none} &  & -- & --\,$\dagger$ & MODE\_20W\_6CORE & 0.606 & 104\,$\dagger$ & MODE\_20W\_6CORE & 0.606 & 104\,$\dagger$ & -- & no\_decision \\
+\addlinespace[2pt]
+Xavier NX / mobilenet-v2-050$\star$ & 0.25 & 9 & 9 & 9 & MODE\_10W\_4CORE & intermediate & 0.019 & 15 & MODE\_20W\_6CORE & 0.024 & 12 & MODE\_10W\_DESKTOP & 0.025 & 15 & 22.2\% & margin\_within\_iqr \\
+ & 0.50 & 9 & 9 & 9 & MODE\_10W\_4CORE & intermediate & 0.019 & 23 & MODE\_20W\_6CORE & 0.024 & 15 & MODE\_10W\_DESKTOP & 0.023 & 25 & 24.0\% & margin\_within\_iqr \\
+ & 0.75 & 9 & 7 & 7 & MODE\_10W\_4CORE & intermediate & 0.018 & 61 & MODE\_20W\_6CORE & 0.023 & 23 & MODE\_10W\_4CORE & 0.018 & 61 & 22.0\% & margin\_gt\_iqr \\
+ & 1.00 & 9 & 1 & 1 & MODE\_20W\_6CORE & max & 0.023 & 93 & MODE\_20W\_6CORE & 0.023 & 93 & MODE\_20W\_6CORE & 0.023 & 93 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+Xavier NX / mobilenet-v2-100$\star$ & 0.25 & 9 & 9 & 9 & MODE\_10W\_4CORE & intermediate & 0.032 & 17 & MODE\_20W\_6CORE & 0.042 & 13 & MODE\_10W\_DESKTOP & 0.041 & 21 & 24.3\% & margin\_within\_iqr \\
+ & 0.50 & 9 & 9 & 9 & MODE\_10W\_4CORE & intermediate & 0.031 & 26 & MODE\_20W\_6CORE & 0.041 & 17 & MODE\_10W\_DESKTOP & 0.039 & 50 & 23.9\% & margin\_within\_iqr \\
+ & 0.75 & 9 & 6 & 6 & MODE\_15W\_4CORE & intermediate & 0.040 & 38 & MODE\_20W\_6CORE & 0.040 & 26 & MODE\_15W\_2CORE & 0.041 & 48 & 1.2\% & margin\_within\_iqr \\
+ & 1.00 & 9 & 1 & 1 & MODE\_20W\_6CORE & max & 0.040 & 75 & MODE\_20W\_6CORE & 0.040 & 75 & MODE\_20W\_6CORE & 0.040 & 75 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+LattePanda / mobilenet-v2-050 & 0.25 & 1 & 1 & 1 & fixed & fixed & 0.183 & 13 & fixed & 0.183 & 13 & fixed & 0.183 & 13 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.50 & 1 & 1 & 1 & fixed & fixed & 0.122 & 18 & fixed & 0.122 & 18 & fixed & 0.122 & 18 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.75 & 1 & 1 & 1 & fixed & fixed & 0.103 & 26 & fixed & 0.103 & 26 & fixed & 0.103 & 26 & 0.0\% & only\_one\_safe\_mode \\
+ & 1.00 & 1 & 1 & 1 & fixed & fixed & 0.084 & 63 & fixed & 0.084 & 63 & fixed & 0.084 & 63 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+LattePanda / mobilenet-v2-100 & 0.25 & 1 & 1 & 1 & fixed & fixed & 0.496 & 27 & fixed & 0.496 & 27 & fixed & 0.496 & 27 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.50 & 1 & 1 & 1 & fixed & fixed & 0.323 & 34 & fixed & 0.323 & 34 & fixed & 0.323 & 34 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.75 & 1 & 1 & 1 & fixed & fixed & 0.267 & 42 & fixed & 0.267 & 42 & fixed & 0.267 & 42 & 0.0\% & only\_one\_safe\_mode \\
+ & 1.00 & 1 & 1 & 1 & fixed & fixed & 0.231 & 76 & fixed & 0.231 & 76 & fixed & 0.231 & 76 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+OrangePi CPU / mobilenet-v2-050 & 0.25 & 1 & 1 & 1 & fixed & fixed & 0.161 & 36 & fixed & 0.161 & 36 & fixed & 0.161 & 36 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.50 & 1 & 1 & 1 & fixed & fixed & 0.129 & 38 & fixed & 0.129 & 38 & fixed & 0.129 & 38 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.75 & 1 & 1 & 1 & fixed & fixed & 0.111 & 43 & fixed & 0.111 & 43 & fixed & 0.111 & 43 & 0.0\% & only\_one\_safe\_mode \\
+ & 1.00 & 1 & 1 & 1 & fixed & fixed & 0.098 & 72 & fixed & 0.098 & 72 & fixed & 0.098 & 72 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+OrangePi CPU / mobilenet-v2-100 & 0.25 & 1 & 1 & 1 & fixed & fixed & 0.279 & 52 & fixed & 0.279 & 52 & fixed & 0.279 & 52 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.50 & 1 & 1 & 1 & fixed & fixed & 0.243 & 57 & fixed & 0.243 & 57 & fixed & 0.243 & 57 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.75 & 1 & 1 & 1 & fixed & fixed & 0.223 & 66 & fixed & 0.223 & 66 & fixed & 0.223 & 66 & 0.0\% & only\_one\_safe\_mode \\
+ & 1.00 & 1 & 1 & 1 & fixed & fixed & 0.204 & 82 & fixed & 0.204 & 82 & fixed & 0.204 & 82 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+OrangePi NPU / mobilenet-v2-050 & 0.25 & 1 & 1 & 1 & fixed & fixed & 0.015 & 40 & fixed & 0.015 & 40 & fixed & 0.015 & 40 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.50 & 1 & 1 & 1 & fixed & fixed & 0.013 & 34 & fixed & 0.013 & 34 & fixed & 0.013 & 34 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.75 & 1 & 1 & 1 & fixed & fixed & 0.012 & 31 & fixed & 0.012 & 31 & fixed & 0.012 & 31 & 0.0\% & only\_one\_safe\_mode \\
+ & 1.00 & 1 & 1 & 1 & fixed & fixed & 0.011 & 86 & fixed & 0.011 & 86 & fixed & 0.011 & 86 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+OrangePi NPU / mobilenet-v2-100 & 0.25 & 1 & 1 & 1 & fixed & fixed & 0.022 & 41 & fixed & 0.022 & 41 & fixed & 0.022 & 41 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.50 & 1 & 1 & 1 & fixed & fixed & 0.019 & 51 & fixed & 0.019 & 51 & fixed & 0.019 & 51 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.75 & 1 & 1 & 1 & fixed & fixed & 0.017 & 55 & fixed & 0.017 & 55 & fixed & 0.017 & 55 & 0.0\% & only\_one\_safe\_mode \\
+ & 1.00 & 1 & 1 & 1 & fixed & fixed & 0.015 & 79 & fixed & 0.015 & 79 & fixed & 0.015 & 79 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+Raspberry Pi 5 / mobilenet-v2-050 & 0.25 & 1 & 1 & 1 & fixed & fixed & 0.103 & 37 & fixed & 0.103 & 37 & fixed & 0.103 & 37 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.50 & 1 & 1 & 1 & fixed & fixed & 0.101 & 45 & fixed & 0.101 & 45 & fixed & 0.101 & 45 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.75 & 1 & 1 & 1 & fixed & fixed & 0.103 & 57 & fixed & 0.103 & 57 & fixed & 0.103 & 57 & 0.0\% & only\_one\_safe\_mode \\
+ & 1.00 & 1 & 1 & 1 & fixed & fixed & 0.106 & 87 & fixed & 0.106 & 87 & fixed & 0.106 & 87 & 0.0\% & only\_one\_safe\_mode \\
+\addlinespace[2pt]
+Raspberry Pi 5 / mobilenet-v2-100 & 0.25 & 1 & 1 & 1 & fixed & fixed & 0.189 & 61 & fixed & 0.189 & 61 & fixed & 0.189 & 61 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.50 & 1 & 1 & 1 & fixed & fixed & 0.208 & 71 & fixed & 0.208 & 71 & fixed & 0.208 & 71 & 0.0\% & only\_one\_safe\_mode \\
+ & 0.75 & 1 & 1 & 1 & fixed & fixed & 0.206 & 84 & fixed & 0.206 & 84 & fixed & 0.206 & 84 & 0.0\% & only\_one\_safe\_mode \\
+ & 1.00 & 1 & 1 & 1 & fixed & fixed & 0.211 & 92 & fixed & 0.211 & 92 & fixed & 0.211 & 92 & 0.0\% & only\_one\_safe\_mode \\
+\bottomrule
+\end{longtable}\end{center}
+\clearpage
+\begin{center}\footnotesize
+\begin{longtable}{@{}lll r *{4}{r r}@{}}
+\caption{Table A. Full raw measurement grid: every measured device--model--mode at four request loads expressed as a fraction of that mode's own confirmed capacity. Cells report marginal wall energy (J/inf, median) and p95 latency (ms, median). Gray p95 marks a cell over the 100\,ms deadline. Source: \texttt{full\_dvfs\_lambda\_cell\_summary.csv} (batch\_size=1), 99 modes $\times$ 4 loads = 396 measured load-cells.}\\
+\toprule
+\multicolumn{4}{@{}l}{} & \multicolumn{2}{c}{load 0.25} & \multicolumn{2}{c}{load 0.50} & \multicolumn{2}{c}{load 0.75} & \multicolumn{2}{c}{load 1.00} \\
+Segment & Device / Model & Mode & Capacity (ips) & J/inf & p95 (ms) & J/inf & p95 (ms) & J/inf & p95 (ms) & J/inf & p95 (ms) \\
+\midrule\endfirsthead
+\toprule Segment & Device / Model & Mode & Capacity (ips) & J/inf & p95 (ms) & J/inf & p95 (ms) & J/inf & p95 (ms) & J/inf & p95 (ms) \\\midrule\endhead
+Server & GPU Server / efficientnet-b4 & 300MHz & 5 & 1.247 & 40 & 0.948 & 56 & 0.870 & 61 & 0.863 & 65 \\
+ &  & 420MHz & 42 & 0.563 & 41 & 0.638 & 47 & 0.672 & 61 & 0.704 & 92 \\
+ &  & 600MHz & 59 & 0.546 & 38 & 0.595 & 43 & 0.641 & 55 & 0.653 & \textcolor{gray}{101} \\
+ &  & 810MHz & 76 & 0.515 & 39 & 0.556 & 41 & 0.579 & 47 & 0.586 & 82 \\
+ &  & 1005MHz & 88 & 0.501 & 39 & 0.552 & 41 & 0.575 & 48 & 0.594 & 90 \\
+ &  & 1200MHz & 112 & 0.487 & 38 & 0.525 & 39 & 0.547 & 45 & 0.564 & \textcolor{gray}{106} \\
+ &  & 1410MHz & 118 & 0.529 & 39 & 0.554 & 38 & 0.587 & 41 & 0.600 & 69 \\
+ &  & 1905MHz & 118 & 1.081 & 39 & 1.425 & 38 & 1.467 & 42 & 1.218 & \textcolor{gray}{142} \\
+ &  & 1950MHz & 118 & 1.194 & 39 & 1.389 & 38 & 1.400 & 40 & 1.184 & 98 \\
+ &  & 1545MHz & 129 & 0.583 & 39 & 0.624 & 38 & 0.665 & 41 & 0.691 & 70 \\
+ &  & 1710MHz & 129 & 0.685 & 39 & 0.753 & 38 & 0.818 & 39 & 0.908 & 51 \\
+ &  & 1800MHz & 134 & 0.813 & 39 & 0.915 & 38 & 1.087 & 39 & 1.106 & 65 \\
+\addlinespace[2pt]
+ & GPU Server / mobilenet-v2-050 & 300MHz & 231 & 0.056 & 20 & 0.069 & 20 & 0.090 & 24 & 0.101 & 62 \\
+ &  & 420MHz & 428 & 0.053 & 21 & 0.063 & 21 & 0.068 & 20 & 0.070 & 52 \\
+ &  & 600MHz & 492 & 0.045 & 20 & 0.056 & 21 & 0.062 & 20 & 0.061 & 31 \\
+ &  & 810MHz & 540 & 0.051 & 20 & 0.054 & 22 & 0.057 & 22 & 0.056 & 30 \\
+ &  & 1410MHz & 562 & 0.055 & 20 & 0.061 & 22 & 0.060 & 22 & 0.061 & 36 \\
+ &  & 1710MHz & 562 & 0.060 & 20 & 0.067 & 22 & 0.069 & 22 & 0.069 & 38 \\
+ &  & 1005MHz & 569 & 0.053 & 20 & 0.057 & 22 & 0.058 & 21 & 0.058 & 36 \\
+ &  & 1545MHz & 585 & 0.052 & 20 & 0.060 & 22 & 0.062 & 22 & 0.062 & 75 \\
+ &  & 1950MHz & 585 & 0.089 & 20 & 0.097 & 23 & 0.106 & 23 & 0.108 & 44 \\
+ &  & 1800MHz & 598 & 0.070 & 20 & 0.074 & 23 & 0.079 & 22 & 0.078 & \textcolor{gray}{184} \\
+ &  & 1905MHz & 598 & 0.077 & 20 & 0.082 & 22 & 0.087 & 22 & 0.086 & 93 \\
+ &  & 1200MHz & 608 & 0.050 & 20 & 0.056 & 22 & 0.058 & 22 & 0.056 & 93 \\
+\addlinespace[2pt]
+ & GPU Server / mobilenet-v2-100 & 300MHz & 169 & 0.075 & 20 & 0.106 & 21 & 0.139 & 27 & 0.147 & 66 \\
+ &  & 420MHz & 307 & 0.070 & 21 & 0.090 & 20 & 0.098 & 20 & 0.102 & 43 \\
+ &  & 600MHz & 422 & 0.070 & 21 & 0.083 & 22 & 0.086 & 20 & 0.087 & 46 \\
+ &  & 810MHz & 481 & 0.072 & 21 & 0.079 & 22 & 0.078 & 21 & 0.079 & 39 \\
+ &  & 1005MHz & 510 & 0.067 & 20 & 0.077 & 21 & 0.081 & 20 & 0.080 & 56 \\
+ &  & 1710MHz & 534 & 0.089 & 20 & 0.098 & 23 & 0.102 & 23 & 0.102 & 37 \\
+ &  & 1545MHz & 548 & 0.073 & 21 & 0.084 & 22 & 0.086 & 23 & 0.086 & 34 \\
+ &  & 1410MHz & 548 & 0.067 & 21 & 0.075 & 23 & 0.079 & 23 & 0.078 & 86 \\
+ &  & 1800MHz & 548 & 0.097 & 20 & 0.106 & 22 & 0.108 & 22 & 0.109 & 40 \\
+ &  & 1950MHz & 562 & 0.124 & 20 & 0.140 & 22 & 0.153 & 23 & 0.163 & 40 \\
+ &  & 1200MHz & 591 & 0.068 & 21 & 0.075 & 23 & 0.075 & 23 & 0.073 & \textcolor{gray}{317} \\
+ &  & 1905MHz & 591 & 0.117 & 20 & 0.130 & 23 & 0.142 & 22 & 0.160 & 61 \\
+\addlinespace[2pt]
+Jetson & Jetson Nano / mobilenet-v2-050 & 5W & 64 & 0.033 & 27 & 0.041 & 34 & 0.035 & 47 & 0.033 & 77 \\
+ &  & MAXN & 99 & 0.039 & 20 & 0.044 & 25 & 0.046 & 37 & 0.048 & 72 \\
+\addlinespace[2pt]
+ & Jetson Nano / mobilenet-v2-100 & 5W & 32 & 0.075 & 41 & 0.071 & 50 & 0.064 & 65 & 0.064 & 90 \\
+ &  & MAXN & 50 & 0.068 & 30 & 0.078 & 39 & 0.084 & 53 & 0.087 & 82 \\
+\addlinespace[2pt]
+ & AGX Orin / efficientnet-b4 & MODE\_15W & 7 & 0.255 & 73 & 0.266 & 78 & 0.251 & 90 & 0.251 & 99 \\
+ &  & MODE\_30W & 23 & 0.219 & 47 & 0.223 & 55 & 0.219 & 70 & 0.221 & 91 \\
+ &  & MODE\_50W & 49 & 0.230 & 30 & 0.235 & 37 & 0.237 & 49 & 0.234 & 72 \\
+ &  & MAXN & 78 & 0.306 & 23 & 0.302 & 30 & 0.303 & 43 & 0.306 & 78 \\
+\addlinespace[2pt]
+ & AGX Orin / mobilenet-v2-050 & MODE\_15W & 227 & 0.012 & 12 & 0.011 & 16 & 0.011 & 25 & 0.011 & 81 \\
+ &  & MODE\_30W & 391 & 0.010 & 9 & 0.010 & 12 & 0.009 & 16 & 0.009 & 76 \\
+ &  & MODE\_50W & 484 & 0.012 & 8 & 0.012 & 10 & 0.011 & 14 & 0.011 & 52 \\
+ &  & MAXN & 719 & 0.016 & 7 & 0.015 & 8 & 0.015 & 12 & 0.015 & 95 \\
+\addlinespace[2pt]
+ & AGX Orin / mobilenet-v2-100 & MODE\_15W & 169 & 0.019 & 14 & 0.018 & 19 & 0.018 & 28 & 0.018 & 75 \\
+ &  & MODE\_30W & 316 & 0.015 & 10 & 0.015 & 13 & 0.014 & 20 & 0.014 & 81 \\
+ &  & MODE\_50W & 410 & 0.018 & 9 & 0.018 & 11 & 0.017 & 15 & 0.017 & 45 \\
+ &  & MAXN & 619 & 0.023 & 8 & 0.023 & 9 & 0.023 & 13 & 0.023 & 68 \\
+\addlinespace[2pt]
+ & Orin Nano / efficientnet-b4 & 7W & 2 & 0.240 & 62 & 0.271 & 64 & 0.279 & 81 & 0.270 & 94 \\
+ &  & 15W & 18 & 0.243 & 49 & 0.239 & 59 & 0.241 & 71 & 0.232 & 96 \\
+ &  & MAXN\_SUPER & 28 & 0.263 & 41 & 0.258 & 48 & 0.254 & 68 & 0.256 & 92 \\
+ &  & 25W & 29 & 0.244 & 45 & 0.239 & 55 & 0.242 & 71 & 0.242 & \textcolor{gray}{109} \\
+\addlinespace[2pt]
+ & Orin Nano / mobilenet-v2-050 & 7W & 268 & 0.010 & 10 & 0.009 & 12 & 0.009 & 20 & 0.009 & 67 \\
+ &  & 15W & 494 & 0.009 & 6 & 0.009 & 7 & 0.008 & 11 & 0.008 & 45 \\
+ &  & 25W & 618 & 0.009 & 5 & 0.009 & 6 & 0.008 & 10 & 0.008 & 41 \\
+ &  & MAXN\_SUPER & 664 & 0.010 & 5 & 0.009 & 6 & 0.009 & 9 & 0.009 & 50 \\
+\addlinespace[2pt]
+ & Orin Nano / mobilenet-v2-100 & 7W & 177 & 0.018 & 13 & 0.016 & 18 & 0.016 & 28 & 0.016 & 90 \\
+ &  & 15W & 354 & 0.016 & 8 & 0.015 & 9 & 0.015 & 15 & 0.015 & 48 \\
+ &  & 25W & 447 & 0.016 & 6 & 0.015 & 8 & 0.015 & 13 & 0.015 & 55 \\
+ &  & MAXN\_SUPER & 495 & 0.017 & 6 & 0.017 & 8 & 0.016 & 13 & 0.016 & \textcolor{gray}{126} \\
+\addlinespace[2pt]
+ & Xavier NX / efficientnet-b4 & MODE\_10W\_DESKTOP & 1 & 0.902 & 73 & 0.737 & 73 & 0.591 & 84 & 0.620 & 98 \\
+ &  & MODE\_10W\_4CORE & 5 & 0.499 & 62 & 0.503 & 84 & 0.473 & 96 & 0.474 & 99 \\
+ &  & MODE\_10W\_2CORE & 6 & 0.471 & 60 & 0.502 & 87 & 0.461 & 95 & 0.475 & \textcolor{gray}{101} \\
+ &  & MODE\_15W\_2CORE & 8 & 0.613 & 62 & 0.607 & 78 & 0.605 & 83 & 0.599 & 89 \\
+ &  & MODE\_15W\_4CORE & 8 & 0.627 & 63 & 0.599 & 78 & 0.596 & 84 & 0.588 & 92 \\
+ &  & MODE\_20W\_2CORE & 8 & 0.600 & 49 & 0.586 & 69 & 0.588 & 80 & 0.583 & 86 \\
+ &  & MODE\_15W\_6CORE & 9 & 0.621 & 60 & 0.598 & 80 & 0.599 & 87 & 0.591 & \textcolor{gray}{102} \\
+ &  & MODE\_20W\_4CORE & 10 & 0.609 & 63 & 0.590 & 74 & 0.596 & 83 & 0.593 & 94 \\
+ &  & MODE\_20W\_6CORE & 11 & 0.603 & 66 & 0.591 & 78 & 0.592 & 87 & 0.595 & \textcolor{gray}{104} \\
+\addlinespace[2pt]
+ & Xavier NX / mobilenet-v2-050 & MODE\_10W\_DESKTOP & 212 & 0.026 & 14 & 0.024 & 18 & 0.023 & 26 & 0.023 & 87 \\
+ &  & MODE\_10W\_2CORE & 219 & 0.020 & 14 & 0.019 & 20 & 0.019 & 32 & 0.018 & 87 \\
+ &  & MODE\_10W\_4CORE & 226 & 0.019 & 14 & 0.019 & 17 & 0.018 & 26 & 0.018 & 61 \\
+ &  & MODE\_15W\_2CORE & 256 & 0.027 & 13 & 0.024 & 17 & 0.024 & 26 & 0.023 & 72 \\
+ &  & MODE\_20W\_2CORE & 273 & 0.026 & 12 & 0.025 & 16 & 0.024 & 24 & 0.024 & 64 \\
+ &  & MODE\_15W\_4CORE & 275 & 0.025 & 12 & 0.023 & 15 & 0.023 & 24 & 0.023 & 81 \\
+ &  & MODE\_15W\_6CORE & 288 & 0.024 & 12 & 0.023 & 16 & 0.023 & 24 & 0.023 & 82 \\
+ &  & MODE\_20W\_4CORE & 288 & 0.025 & 12 & 0.024 & 16 & 0.024 & 24 & 0.023 & 73 \\
+ &  & MODE\_20W\_6CORE & 300 & 0.024 & 12 & 0.024 & 15 & 0.023 & 23 & 0.023 & 93 \\
+\addlinespace[2pt]
+ & Xavier NX / mobilenet-v2-100 & MODE\_10W\_DESKTOP & 146 & 0.043 & 17 & 0.040 & 23 & 0.039 & 34 & 0.039 & \textcolor{gray}{105} \\
+ &  & MODE\_10W\_4CORE & 170 & 0.032 & 16 & 0.032 & 20 & 0.031 & 28 & 0.031 & 55 \\
+ &  & MODE\_10W\_2CORE & 171 & 0.035 & 16 & 0.032 & 21 & 0.032 & 31 & 0.031 & 76 \\
+ &  & MODE\_15W\_2CORE & 211 & 0.042 & 14 & 0.041 & 19 & 0.041 & 30 & 0.041 & 81 \\
+ &  & MODE\_15W\_4CORE & 216 & 0.041 & 14 & 0.040 & 18 & 0.040 & 26 & 0.040 & 71 \\
+ &  & MODE\_15W\_6CORE & 219 & 0.041 & 14 & 0.040 & 17 & 0.040 & 25 & 0.039 & 73 \\
+ &  & MODE\_20W\_2CORE & 219 & 0.042 & 13 & 0.042 & 18 & 0.040 & 27 & 0.040 & 66 \\
+ &  & MODE\_20W\_4CORE & 228 & 0.042 & 13 & 0.041 & 17 & 0.040 & 25 & 0.040 & 72 \\
+ &  & MODE\_20W\_6CORE & 236 & 0.042 & 13 & 0.041 & 17 & 0.040 & 26 & 0.040 & 75 \\
+\addlinespace[2pt]
+SBC & LattePanda / mobilenet-v2-050 & fixed & 136 & 0.182 & 13 & 0.122 & 18 & 0.103 & 26 & 0.085 & 63 \\
+\addlinespace[2pt]
+ & LattePanda / mobilenet-v2-100 & fixed & 49 & 0.489 & 27 & 0.325 & 34 & 0.269 & 42 & 0.234 & 76 \\
+\addlinespace[2pt]
+ & OrangePi CPU / mobilenet-v2-050 & fixed & 98 & 0.162 & 36 & 0.130 & 38 & 0.111 & 43 & 0.098 & 72 \\
+\addlinespace[2pt]
+ & OrangePi CPU / mobilenet-v2-100 & fixed & 41 & 0.284 & 52 & 0.245 & 57 & 0.224 & 66 & 0.205 & 82 \\
+\addlinespace[2pt]
+ & OrangePi NPU / mobilenet-v2-050 & fixed & 234 & 0.014 & 40 & 0.013 & 34 & 0.012 & 31 & 0.011 & 86 \\
+\addlinespace[2pt]
+ & OrangePi NPU / mobilenet-v2-100 & fixed & 156 & 0.021 & 41 & 0.019 & 51 & 0.017 & 55 & 0.015 & 79 \\
+\addlinespace[2pt]
+ & Raspberry Pi 5 / mobilenet-v2-050 & fixed & 43 & 0.103 & 37 & 0.104 & 45 & 0.104 & 57 & 0.105 & 87 \\
+\addlinespace[2pt]
+ & Raspberry Pi 5 / mobilenet-v2-100 & fixed & 13 & 0.202 & 61 & 0.205 & 71 & 0.209 & 84 & 0.211 & 92 \\
+\bottomrule
+\end{longtable}\end{center}
+\end{document}

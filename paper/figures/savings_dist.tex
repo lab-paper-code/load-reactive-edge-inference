@@ -1,0 +1,24 @@
+\begin{tikzpicture}
+\definecolor{segserver}{HTML}{D55E00}
+\definecolor{segjetson}{HTML}{0072B2}
+\begin{axis}[
+  width=\columnwidth, height=0.50\columnwidth,
+  ylabel={Energy saved vs max-perf (\%)},
+  xmin=0, xmax=38, ymin=0, ymax=55,
+  xtick={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37}, xticklabels={{Server E-B4 0.75},{Server M1.0 0.75},{Server M1.0 0.25},{Server M1.0 0.50},{Orin M0.5 0.50},{Server E-B4 0.50},{Orin M1.0 0.50},{Server E-B4 0.25},{Orin M0.5 0.25},{Orin M1.0 0.25},{Orin E-B4 0.25},{Xavier E-B4 0.25},{Xavier M1.0 0.25},{Xavier M0.5 0.50},{Xavier M1.0 0.50},{Xavier M0.5 0.25},{Xavier M0.5 0.75},{Nano M0.5 0.50},{Orin E-B4 0.50},{Nano M1.0 0.50},{OrinN M0.5 0.25},{OrinN M0.5 0.50},{OrinN M1.0 0.50},{OrinN M1.0 0.25},{OrinN M1.0 0.75},{OrinN M0.5 0.75},{Xavier E-B4 0.75},{Xavier E-B4 0.50},{Server M0.5 0.75},{Server M0.5 0.50},{Xavier M1.0 0.75},{OrinN E-B4 0.50},{Nano M0.5 0.25},{Server M0.5 0.25},{Nano M1.0 0.25},{OrinN E-B4 0.25},{OrinN E-B4 0.75}},
+  x tick label style={rotate=60, anchor=east, font=\tiny, yshift=0.4pt},
+  ymajorgrids=true, grid style={black!10},
+  label style={font=\footnotesize}, tick label style={font=\footnotesize},
+  legend style={draw=none, fill=none, font=\scriptsize, at={(0.98,0.98)}, anchor=north east},
+  legend cell align=left,
+  area legend,
+]
+\addplot[ybar, bar width=3.0pt, bar shift=0pt, draw=segserver, fill=segserver] coordinates {(1,48.79) (2,47.35) (3,42.64) (4,41.92) (6,41.27) (8,39.37) (29,2.41) (30,1.32) (34,0.00)};
+\addlegendentry{Server}
+\addplot[ybar, bar width=3.0pt, bar shift=0pt, draw=segjetson, fill=segjetson] coordinates {(5,41.67) (7,39.51) (9,38.68) (10,37.55) (11,29.62) (12,24.94) (13,24.27) (14,24.03) (15,23.89) (16,22.22) (17,21.98) (18,21.39) (19,21.12) (20,18.33) (21,10.84) (22,10.34) (23,9.24) (24,8.36) (25,6.70) (26,5.68) (27,5.63) (28,2.78) (31,1.17) (32,1.17) (33,0.95) (35,0.00) (36,0.00) (37,0.00)};
+\addlegendentry{Jetson}
+\draw[densely dotted, black, line width=0.9pt] (axis cs:0,21.12) -- (axis cs:38,21.12);
+\node[font=\scriptsize, anchor=south east] at (axis cs:37,21.12) {median 21.1\%};
+\node[font=\scriptsize, color=segserver, anchor=south west] at (axis cs:1,48.79) {max 48.8\%};
+\end{axis}
+\end{tikzpicture}

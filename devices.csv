@@ -1,0 +1,10 @@
+codename,paper_label,segment,accelerator,execution_provider
+gpu-server,GPU Server,Server,RTX 2080 Ti (x86 i7),CUDA
+orin,AGX Orin,Jetson,Ampere GPU,TensorRT
+orin-nano,Orin Nano,Jetson,Ampere GPU,TensorRT
+xavier,Xavier NX,Jetson,Volta GPU,TensorRT
+jetson,Jetson Nano,Jetson,Maxwell GPU,TensorRT
+orangepi-npu,OrangePi NPU,Small-board,RK3588 NPU,RKNN
+orangepi,OrangePi CPU,Small-board,RK3588 CPU,CPU
+rasp5,Raspberry Pi 5,Small-board,Arm CPU,CPU
+lattepanda,LattePanda 3 Delta,Small-board,x86 N100 CPU,CPU

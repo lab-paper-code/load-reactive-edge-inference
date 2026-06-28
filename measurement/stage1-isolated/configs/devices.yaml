@@ -1,0 +1,8 @@
+# Public placeholder. Populate with your own fleet to re-measure.
+devices:
+  gpu-server: {host: "", dvfs: "nvidia-smi", port: 8090}
+  orin: {host: "", dvfs: "nvpmodel", port: 8090}
+  # ... one entry per codename in devices.csv ...
+shelly_server_ip: "REPLACE_WITH_METER_IP"
+prometheus_url: "REPLACE_WITH_PROMETHEUS_URL"
+remote_dir: "/tmp/release-bench"

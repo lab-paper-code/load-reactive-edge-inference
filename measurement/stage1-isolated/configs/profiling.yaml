@@ -1,0 +1,66 @@
+# EEP (edge energy profiler) profiling configuration
+# Single source for all hardcoded values
+
+# --- Model definitions ---
+models:
+  mobilenet-v2-050:
+    stage: 1
+    pretrained: timm/mobilenetv2_050
+    input_shape: [3, 224, 224]
+    imagenet_top1: 0.659  # fraction [0,1], canonical unit
+
+  mobilenet-v2-100:
+    stage: 2
+    pretrained: torchvision.models.mobilenet_v2
+    params: {width_mult: 1.0}
+    input_shape: [3, 224, 224]
+    imagenet_top1: 0.719  # fraction [0,1], canonical unit
+
+  efficientnet-b4:
+    stage: 3
+    pretrained: torchvision.models.efficientnet_b4
+    params: {}
+    input_shape: [3, 380, 380]
+    imagenet_top1: 0.834  # fraction [0,1], canonical unit
+
+# --- Profiling ---
+profiling:
+  duration_s: 30.0
+  warmup: 50
+  scrape_wait_s: 7
+  scrape_interval_s: 5
+  direct_max_age_s: 11
+  idle_poll_interval_s: 1.5
+  idle_stable_abs_threshold_w: 0.5
+  idle_stable_rel_threshold: 0.1
+  direct_poll_interval_s: 0.5
+  power_idle_window_s: 10.0
+  power_postroll_s: 3.0
+  plateau_abs_margin_w: 3.0
+  plateau_rel_margin: 0.15
+  plateau_stability_abs_w: 2.0
+  plateau_stability_rel: 0.05
+  plateau_min_samples: 3
+  incremental_abs_margin_w: 1.0
+  incremental_rel_margin: 0.1
+  incremental_idle_std_multiplier: 2.0
+  prom_window_margin_s: 15
+  timeout_build_guard_s: 60
+  timeout_trial_guard_s: 15
+  timeout_final_guard_s: 60
+  large_batch_threshold: 64
+  large_batch_timeout_multiplier: 1.6
+  large_batch_warmup_multiplier: 1.5
+  large_batch_build_guard_s: 120
+  large_batch_trial_guard_s: 30
+  trials: 3
+  cooldown_s: 10
+
+# --- Batch sizes ---
+batch_sizes: [1, 4, 16, 64]
+
+# --- Infrastructure ---
+infra:
+  remote_dir: /tmp/release-bench
+  prometheus_url: "REPLACE_WITH_PROMETHEUS_URL"
+  ssh_connect_timeout: 5

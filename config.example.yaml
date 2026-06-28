@@ -1,0 +1,9 @@
+# Placeholder hardware config. Real measurement requires the fleet in devices.csv.
+power_meter:
+  shelly_server_ip: "REPLACE_WITH_METER_IP"
+  poll_interval_s: 0.5
+metrics:
+  prometheus_url: "REPLACE_WITH_PROMETHEUS_URL"
+remote:
+  work_dir: "/tmp/release-bench"
+  ssh_aliases: {}   # map device codename -> ssh host; empty in the public release

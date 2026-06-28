@@ -1,0 +1,16 @@
+# Tier A (figures and tables from frozen derived CSVs): Python standard library only, no install needed.
+
+# Tier B (regenerate derived CSVs from raw via scripts/reproduce_from_raw.sh):
+numpy
+matplotlib
+
+# Measurement harness (measurement/, reference only; also requires the hardware fleet):
+aiohttp
+onnxruntime
+PyYAML
+pandas
+
+# Model export (models/export_onnx.py):
+torch
+timm
+onnx

@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+title: "edge-inference-energy-grid: measurement grid and pipeline for load-reactive energy-optimal edge inference"
+version: "1.0.0"
+date-released: "2026-06-29"
+message: "If you use this dataset or code, please cite the accompanying paper."
+type: dataset
+authors:
+  - name: "Anonymous (under double-blind review)"
+license: CC-BY-4.0
+preferred-citation:
+  type: article
+  title: "Load Moves the Energy-Optimal Configuration of Real-Time Edge Inference"
+  year: 2026
+  authors:
+    - name: "Anonymous (under double-blind review)"

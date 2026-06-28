@@ -1,0 +1,32 @@
+{\scriptsize \tikz[baseline=-0.5ex]{\draw[blue!55!black,line width=1.1pt](0,0)--(0.36,0);\fill[blue!55!black](0.135,-0.045) rectangle (0.225,0.045);}\,MAXN (max-perf.)\enspace \tikz[baseline=-0.5ex]{\draw[red!75!black,line width=1.1pt](0,0)--(0.36,0);\fill[red!75!black](0.18,0) circle (0.055);}\,30\,W (energy-optimal)\enspace \tikz[baseline=-0.5ex]{\draw[gray!60,line width=0.8pt](0,0)--(0.36,0);}\,other power modes}
+\par\vspace{2pt}
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=1 by 2, vertical sep=0.85cm,
+    x descriptions at=edge bottom},
+  width=\columnwidth, height=0.40\columnwidth,
+  xmin=0, xmax=650, xtick={0,200,400,600},
+  ymajorgrids=true, grid style={black!12},
+  label style={font=\footnotesize}, tick label style={font=\footnotesize},
+]
+\nextgroupplot[ylabel={Marginal wall energy (J/inf.)}, ymin=0.0130, ymax=0.0251, ytick={0.015,0.020}, yticklabels={0.015,0.020}, scaled y ticks=false]
+\addplot[forget plot, draw=none, fill=red!7] coordinates {(316.4,0.0130) (650,0.0130) (650,0.0251) (316.4,0.0251)} \closedcycle;
+\draw[red!70!black, dotted, line width=0.9pt] (axis cs:316.4,0.0130) -- (axis cs:316.4,0.0251);
+\addplot[forget plot, gray!55, line width=0.4pt, mark=*, mark size=0.8pt] coordinates {(42.8,0.0186) (85.1,0.0178) (126.9,0.0180) (169.1,0.0176)};
+\addplot[forget plot, gray!55, line width=0.4pt, mark=*, mark size=0.8pt] coordinates {(103.4,0.0180) (206.0,0.0178) (305.0,0.0173) (410.0,0.0171)};
+\addplot[forget plot, blue!55!black, line width=1.3pt, mark=square*, mark size=1.5pt] coordinates {(155.2,0.0235) (310.0,0.0231) (462.8,0.0229) (619.1,0.0227)};
+\addplot[forget plot, red!75!black, line width=1.3pt, mark=*, mark size=1.5pt] coordinates {(78.2,0.0153) (158.9,0.0147) (237.2,0.0141) (315.5,0.0140)};
+\draw[{Stealth[length=3.0pt,width=3.2pt]}-{Stealth[length=3.0pt,width=3.2pt]}, red!75!black, line width=0.85pt] (axis cs:177,0.0153) -- (axis cs:177,0.0227);
+\node[font=\scriptsize, red!75!black, anchor=west, fill=white, fill opacity=0.85, text opacity=1, inner sep=0.6pt] at (axis cs:184,0.0190) {$\approx$37\% cheaper};
+\nextgroupplot[ylabel={p95 latency (ms)}, xlabel={External demand (req/s)},
+  ymin=0, ymax=112, ytick={0,50,100}]
+\addplot[forget plot, draw=none, fill=red!7] coordinates {(316.4,0) (650,0) (650,112) (316.4,112)} \closedcycle;
+\draw[red!70!black, dotted, line width=0.9pt] (axis cs:316.4,0) -- (axis cs:316.4,112);
+\addplot[forget plot, gray!55, line width=0.4pt, mark=*, mark size=0.8pt] coordinates {(42.8,14.4) (85.1,19.1) (126.9,28.4) (169.1,75.0)};
+\addplot[forget plot, gray!55, line width=0.4pt, mark=*, mark size=0.8pt] coordinates {(103.4,8.7) (206.0,10.5) (305.0,15.0) (410.0,44.8)};
+\addplot[forget plot, blue!55!black, line width=1.3pt, mark=square*, mark size=1.5pt] coordinates {(155.2,7.7) (310.0,8.9) (462.8,12.9) (619.1,68.2)};
+\addplot[forget plot, red!75!black, line width=1.3pt, mark=*, mark size=1.5pt] coordinates {(78.2,10.0) (158.9,13.0) (237.2,19.8) (315.5,81.3)};
+\addplot[forget plot, dashed, black!55, line width=0.8pt, samples=2, domain=0:650] {100};
+\node[font=\scriptsize, black!55, anchor=north west] at (axis cs:8,97) {100\,ms deadline};
+\end{groupplot}
+\end{tikzpicture}

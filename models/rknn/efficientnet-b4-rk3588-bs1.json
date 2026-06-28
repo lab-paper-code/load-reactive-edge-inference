@@ -1,0 +1,10 @@
+{
+  "model": "efficientnet-b4",
+  "target_platform": "rk3588",
+  "batch_size": 1,
+  "quantized": false,
+  "source_onnx": "models/efficientnet-b4.onnx",
+  "source_onnx_sha256": "f19aa28943b7a79ef31952cd6ac126109edbab16c7bc0eb2ef01ad9a5dc03b30",
+  "output_rknn": "models/rknn/efficientnet-b4-rk3588-bs1.rknn",
+  "output_rknn_sha256": "eb5d309dac51438842bf4cb0071cbfc3ccd9362bdf2c78167f98155199460468"
+}

@@ -1,0 +1,10 @@
+{
+  "model": "mobilenet-v2-050",
+  "target_platform": "rk3588",
+  "batch_size": 1,
+  "quantized": false,
+  "source_onnx": "models/mobilenet-v2-050.onnx",
+  "source_onnx_sha256": "8645e5d6511cf0f78fa4a451e3bd86b3ab6b39bb5f9216ba32d2d9aebc852ee2",
+  "output_rknn": "models/rknn/mobilenet-v2-050-rk3588-bs1.rknn",
+  "output_rknn_sha256": "ba3224391d45e19eff09cdfce96040a3614cc8cfde5319f919f40630a99f8c26"
+}
