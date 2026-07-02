@@ -9,7 +9,7 @@
   ymajorgrids=true, grid style={black!12},
   label style={font=\footnotesize}, tick label style={font=\footnotesize},
 ]
-\nextgroupplot[ylabel={Marginal wall energy (J/inf.)}, ymin=0.0130, ymax=0.0251, ytick={0.015,0.020}, yticklabels={0.015,0.020}, scaled y ticks=false]
+\nextgroupplot[ylabel={AC input energy (J/inf.)}, ymin=0.0130, ymax=0.0251, ytick={0.015,0.020}, yticklabels={0.015,0.020}, scaled y ticks=false]
 \addplot[forget plot, draw=none, fill=red!7] coordinates {(316.4,0.0130) (650,0.0130) (650,0.0251) (316.4,0.0251)} \closedcycle;
 \draw[red!70!black, dotted, line width=0.9pt] (axis cs:316.4,0.0130) -- (axis cs:316.4,0.0251);
 \addplot[forget plot, gray!55, line width=0.4pt, mark=*, mark size=0.8pt] coordinates {(42.8,0.0186) (85.1,0.0178) (126.9,0.0180) (169.1,0.0176)};
@@ -27,6 +27,6 @@
 \addplot[forget plot, blue!55!black, line width=1.3pt, mark=square*, mark size=1.5pt] coordinates {(155.2,7.7) (310.0,8.9) (462.8,12.9) (619.1,68.2)};
 \addplot[forget plot, red!75!black, line width=1.3pt, mark=*, mark size=1.5pt] coordinates {(78.2,10.0) (158.9,13.0) (237.2,19.8) (315.5,81.3)};
 \addplot[forget plot, dashed, black!55, line width=0.8pt, samples=2, domain=0:650] {100};
-\node[font=\scriptsize, black!55, anchor=north west] at (axis cs:8,97) {100\,ms deadline};
+\node[font=\scriptsize, black!55, anchor=north west] at (axis cs:8,97) {100\,ms latency SLO};
 \end{groupplot}
 \end{tikzpicture}

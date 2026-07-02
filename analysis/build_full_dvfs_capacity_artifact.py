@@ -1,9 +1,9 @@
-"""Build the full-DVFS capacity artifact from validated capacity raws.
+"""Build the full-DVFS MST artifact from validated MST raws.
 
 This builder is intentionally separate from the policy-keyed authoritative manifest:
 policy-keyed rows are keyed by (device, model, policy), while full-DVFS evidence is
 keyed by (device, model, dvfs_mode). Mixing the two would collapse distinct
-operating points into one `policy=full_dvfs` bucket.
+configurations into one `policy=full_dvfs` bucket.
 
 Outputs:
   results/derived/full_dvfs_capacity.csv

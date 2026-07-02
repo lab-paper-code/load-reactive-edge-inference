@@ -1,4 +1,4 @@
-"""Shelly wall-power trace orchestration for measurement runs.
+"""Shelly AC input power trace orchestration for measurement runs.
 
 Encapsulates the lifecycle of a DirectShellyTraceCollector: start (0.5s polling),
 stop, slice per-run windows, compute warm-idle + per-confirmation-run summaries,

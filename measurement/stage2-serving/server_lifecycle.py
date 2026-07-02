@@ -1,6 +1,6 @@
 """Remote infer_server lifecycle: deploy, wait-and-validate, sanity, teardown.
 
-Every measurement runner (capacity find, lambda sweep) shares the same server
+Every measurement runner (MST find, lambda sweep) shares the same server
 lifecycle on each device. This module owns that full lifecycle so both
 runners can reuse the exact same discipline (liveness probe with probe/dead
 disambiguation, 30s dead-confirm window, DVFS validation via /status, etc.).

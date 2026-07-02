@@ -1,5 +1,5 @@
 """
-S1-2: Poisson Load Generator with Binary Search Capacity Finder
+S1-2: Poisson Load Generator with Binary Search maximum sustainable throughput (MST) Finder
 
 Runs on meterless-a. Sends open-loop Poisson arrivals to a remote infer_server.py
 and records per-request latency.
@@ -12,7 +12,7 @@ Usage:
     # Fixed rate test
     python3 load_generator.py --target http://orin:8090 --rate 50 --duration 60
 
-    # Binary search for capacity
+    # Binary search for MST
     python3 load_generator.py --target http://orin:8090 --find-capacity \
         --l-max 100 --mu-hint 38.0 --duration 60
 """
@@ -38,7 +38,7 @@ HTTP_CLIENT_TIMEOUT = 30       # aiohttp per-request timeout (seconds)
 SEARCH_PRECISION = 0.05        # Binary search convergence ratio (high-low < precision*low)
 DEFAULT_N_CONFIRM = 3          # Boundary confirmation repeat count
 DEFAULT_COOLDOWN_S = 15.0      # Cool-down after overload probe (seconds)
-CONFIRM_BACKOFF = 0.95         # Capacity reduction factor on failed confirmation
+CONFIRM_BACKOFF = 0.95         # MST reduction factor on failed confirmation
 MAX_BACKOFF_ROUNDS = 5         # Max confirmation-backoff iterations before giving up
 
 

@@ -5,7 +5,7 @@
 \renewcommand{\arraystretch}{1.05}
 \begin{document}
 \section*{Full result tables (working artifact)}
-\noindent Generated from official derived artifacts with no re-derivation. Deadline p95 $\le 100$\,ms; loads $\{0.25,0.5,0.75,1.0\}$; wall-plug marginal energy. $\dagger$ = SLA-unsafe (p95 over deadline). Table~A load = fraction of each mode's own capacity (raw measurement); Table~B load = fraction of the group's max capacity (the oracle-sheet axis).\par\medskip
+\noindent Generated from official derived artifacts with no re-derivation. Deadline p95 $\le 100$\,ms; loads $\{0.25,0.5,0.75,1.0\}$; AC input energy. $\dagger$ = SLA-unsafe (p95 over deadline). Table~A load = fraction of each mode's own capacity (raw measurement); Table~B load = fraction of the group's max capacity (the oracle-sheet axis).\par\medskip
 \begin{center}\tiny
 \setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}l l r r r l l r r l r r l r r r l@{}}
@@ -134,7 +134,7 @@ Raspberry Pi 5 / mobilenet-v2-100 & 0.25 & 1 & 1 & 1 & fixed & fixed & 0.189 & 6
 \clearpage
 \begin{center}\footnotesize
 \begin{longtable}{@{}lll r *{4}{r r}@{}}
-\caption{Table A. Full raw measurement grid: every measured device--model--mode at four request loads expressed as a fraction of that mode's own confirmed capacity. Cells report marginal wall energy (J/inf, median) and p95 latency (ms, median). Gray p95 marks a cell over the 100\,ms deadline. Source: \texttt{full\_dvfs\_lambda\_cell\_summary.csv} (batch\_size=1), 99 modes $\times$ 4 loads = 396 measured load-cells.}\\
+\caption{Table A. Full raw measurement grid: every measured device--model--mode at four request loads expressed as a fraction of that mode's own confirmed capacity. Cells report AC input energy (J/inf, median) and p95 latency (ms, median). Gray p95 marks a cell over the 100\,ms deadline. Source: \texttt{full\_dvfs\_lambda\_cell\_summary.csv} (batch\_size=1), 99 modes $\times$ 4 loads = 396 measured load-cells.}\\
 \toprule
 \multicolumn{4}{@{}l}{} & \multicolumn{2}{c}{load 0.25} & \multicolumn{2}{c}{load 0.50} & \multicolumn{2}{c}{load 0.75} & \multicolumn{2}{c}{load 1.00} \\
 Segment & Device / Model & Mode & Capacity (ips) & J/inf & p95 (ms) & J/inf & p95 (ms) & J/inf & p95 (ms) & J/inf & p95 (ms) \\

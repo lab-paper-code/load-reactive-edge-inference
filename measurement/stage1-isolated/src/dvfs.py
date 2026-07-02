@@ -90,7 +90,7 @@ def selected_dvfs_modes(device_cfg: dict,
     modes = available_dvfs_modes(device_cfg)
     if dvfs_override is not None:
         if int(dvfs_override) not in modes:
-            raise ValueError(f'DVFS mode {dvfs_override} not valid for device; available={modes}')
+            raise ValueError(f'power mode {dvfs_override} not valid for device; available={modes}')
         return [int(dvfs_override)]
     if all_dvfs:
         return modes
@@ -98,11 +98,11 @@ def selected_dvfs_modes(device_cfg: dict,
 
 
 def apply_dvfs_mode(ssh_alias: str, device_name: str, device_cfg: dict, mode: int):
-    """Apply and verify configured DVFS mode for the target device."""
+    """Apply and verify configured power mode for the target device."""
     mode = int(mode)
     modes = available_dvfs_modes(device_cfg)
     if mode not in modes:
-        raise ValueError(f'{device_name}: unsupported DVFS mode {mode}; available={modes}')
+        raise ValueError(f'{device_name}: unsupported power mode {mode}; available={modes}')
 
     if 'dvfs_modes' in device_cfg:
         label = str(device_cfg['dvfs_modes'][mode])

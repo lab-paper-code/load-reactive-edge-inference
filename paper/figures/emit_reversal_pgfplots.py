@@ -114,7 +114,7 @@ def render_tikz(cells, caps, oracle=ORACLE, maxperf=MAXPERF, deadline=DEADLINE):
           rf"(axis cs:{cap_o:.1f},{ymin}) -- (axis cs:{cap_o:.1f},{ymax});")
 
     # --- panel 1: energy ---
-    a(rf"\nextgroupplot[ylabel={{Marginal wall energy (J/inf.)}}, "
+    a(rf"\nextgroupplot[ylabel={{AC input energy (J/inf.)}}, "
       rf"ymin={e_lo:.4f}, ymax={e_hi:.4f}, ytick={{0.015,0.020}}, "
       rf"yticklabels={{0.015,0.020}}, scaled y ticks=false]")
     shade_and_capline(f"{e_lo:.4f}", f"{e_hi:.4f}")
@@ -157,7 +157,7 @@ def render_tikz(cells, caps, oracle=ORACLE, maxperf=MAXPERF, deadline=DEADLINE):
     a(rf"\addplot[forget plot, dashed, black!55, line width=0.8pt, samples=2, "
       rf"domain=0:{xmax:.0f}] {{{deadline:g}}};")
     a(rf"\node[font=\scriptsize, black!55, anchor=north west] "
-      rf"at (axis cs:8,{deadline - 3:g}) {{100\,ms deadline}};")
+      rf"at (axis cs:8,{deadline - 3:g}) {{100\,ms latency SLO}};")
     a(r"\end{groupplot}")
     a(r"\end{tikzpicture}")
     return "\n".join(L) + "\n"

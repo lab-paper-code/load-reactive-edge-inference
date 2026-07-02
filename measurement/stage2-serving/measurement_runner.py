@@ -4,7 +4,7 @@ Orchestrates one MeasurementJob through the shared
 DVFS → deploy → validate → sanity → power-trace → load → teardown pipeline,
 with two load variants at Phase 4:
 
-  - capacity-finding (`run_capacity_single_job`): binary search via
+  - MST-finding (`run_capacity_single_job`): binary search via
     load_generator --find-capacity
   - lambda-sweep (`run_lambda_sweep_single_job`): fixed-rate Poisson load at
     λ_frac × C for (fracs × runs) cells in one server session
@@ -260,7 +260,7 @@ def _power_trace_guard(job: MeasurementJob, collector) -> dict | None:
                    collector_errors=errors)
 
 
-# --- Capacity-finding per-job ---
+# --- MST-finding per-job ---
 
 async def run_capacity_single_job(job: MeasurementJob,
                                   dry_run: bool = False) -> dict:

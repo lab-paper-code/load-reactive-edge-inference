@@ -1,7 +1,7 @@
 """
-S1-1: Analytical Capacity Estimate (M/G/1 based)
+S1-1: Analytical maximum sustainable throughput (MST) Estimate (M/G/1 based)
 
-Uses existing EEP tensor (batch=1, best-DVFS) data to estimate SLO-feasible sustained
+Uses existing EEP tensor (batch=1, best power mode) data to estimate SLO-feasible sustained
 throughput C(d,m; L_max) for each (device, model) pair.
 
 Three models for range bracketing:
@@ -28,7 +28,7 @@ BISECT_ITERATIONS = 100        # Iterations for rho binary search
 MM1_P95_FACTOR = log(20)       # ln(1/0.05) = ln(20) ≈ 2.996 for M/M/1 p95
 
 def best_dvfs_profiles(db_path: str) -> list[dict]:
-    """Load batch=1 best-DVFS rows using current profiler DB semantics."""
+    """Load batch=1 best power-mode rows using current profiler DB semantics."""
     return load_best_batch1_profiles(db_path)
 
 
@@ -71,7 +71,7 @@ def solve_rho_max(mu_s: float, cs2: float, l_max_s: float,
 
 
 def estimate_capacity(profiles: list[dict], l_max_ms: float) -> list[dict]:
-    """Estimate analytical capacity for each (device, model) pair."""
+    """Estimate analytical MST for each (device, model) pair."""
     l_max_s = l_max_ms / 1000.0
     results = []
 
@@ -122,7 +122,7 @@ def estimate_capacity(profiles: list[dict], l_max_ms: float) -> list[dict]:
 
 
 def print_table(results: list[dict]):
-    hdr = (f"{'Device':<12} {'Model':<20} {'DVFS':>4} {'L_p50':>7} {'L_p95':>7} "
+    hdr = (f"{'Device':<12} {'Model':<20} {'Mode':>4} {'L_p50':>7} {'L_p95':>7} "
            f"{'Cs2':>6} {'mu':>7} {'C_md1':>7} {'C_mg1':>7} {'C_mm1':>7} {'E_inc':>8}")
     print(hdr)
     print("-" * len(hdr))
@@ -158,7 +158,7 @@ def main():
     print(f"L_max: {args.l_max} ms (p95 SLO)\n")
 
     profiles = best_dvfs_profiles(args.db)
-    print(f"Loaded {len(profiles)} (device, model) pairs at batch=1, best DVFS\n")
+    print(f"Loaded {len(profiles)} (device, model) pairs at batch=1, best power mode\n")
 
     results = estimate_capacity(profiles, args.l_max)
     print_table(results)

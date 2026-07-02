@@ -367,7 +367,7 @@ def _summary(rows: list[dict], pareto_rows: list[dict],
         "pareto": {
             "definition": (
                 "Within each (device, model, lambda_frac), a mode is dominated "
-                "when another mode has <= median marginal wall energy and <= "
+                "when another mode has <= median marginal AC input energy and <= "
                 "median p95 latency, with one strict improvement."),
             "rows": len(pareto_rows),
             "pareto_frontier_rows": pareto_frontier_count,

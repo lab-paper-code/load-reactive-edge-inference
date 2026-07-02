@@ -12,8 +12,8 @@ import tempfile
 from pathlib import Path
 
 # POWER_EXCLUDED_DEVICES: devices without a power meter (no Shelly Plug S attached).
-# These devices cannot contribute wall-energy measurements and are excluded from
-# the wall-energy computation in the serving-power and T2 build scripts.
+# These devices cannot contribute AC input energy measurements and are excluded from
+# the AC input energy computation in the serving-power and T2 build scripts.
 # Transient operational issues must NOT be encoded here; only devices that are
 # structurally unmetered belong in this set.
 POWER_EXCLUDED_DEVICES: frozenset[str] = frozenset({"meterless-a", "meterless-b"})
@@ -50,9 +50,9 @@ def atomic_json_write(path: Path, payload) -> None:
 
 
 def marginal_wall_energy_per_image(delta_w, rate, n):
-    """Per-image marginal wall energy = ΔW / (rate × N), in joules per image.
+    """Per-image marginal AC input energy = ΔW / (rate × N), in joules per image.
 
-    marginal_wall_energy: wall-plug energy per inference above idle.
+    marginal_wall_energy: AC input energy per inference above idle.
     Single source of truth for the per-image energy FORMULA, shared by the
     λ-sweep builder, build_serving_power_csv, and the freshness gate. It is a
     PURE QUOTIENT: no rounding and no n==1 special-case. Rounding is each call

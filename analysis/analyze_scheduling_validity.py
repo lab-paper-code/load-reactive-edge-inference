@@ -2,7 +2,7 @@
 
 This script turns the full-DVFS sweep into scheduler-facing evidence.  It does
 not compare raw lambda fractions across modes directly.  Instead, it fixes an
-external demand level for each `(device, model)` group and evaluates each DVFS
+external demand level for each `(device, model)` group and evaluates each power
 mode at the corresponding load fraction on that mode:
 
     load_fraction_on_mode = external_demand_rps / mode_capacity_ips
@@ -88,7 +88,7 @@ DECISION_CATEGORY_LABELS = {
     "fixed": "fixed device",
     "lowest": "lowest mode",
     "intermediate": "intermediate mode",
-    "max": "max-capacity mode",
+    "max": "max-MST mode",
     "no_sla_safe_mode": "no SLA-safe mode",
     "no_feasible_mode": "infeasible demand",
 }
@@ -510,8 +510,8 @@ def build_policy_rows(profiles_by_group: dict[tuple[str, str], list[dict]],
             ]
             safe_evals = [ev for ev in evals if ev["sla_safe"]]
             # dynamic: oracle policy, feasible min-energy selection.
-            # max_perf: max-performance proxy (highest capacity mode).
-            # capacity_only: capacity-only proxy (mode with highest capacity, ignoring energy).
+            # max_perf: max-performance proxy (highest MST mode).
+            # capacity_only: capacity-only proxy (mode with highest MST, ignoring energy).
             dynamic = min(
                 safe_evals,
                 key=lambda ev: (
@@ -669,7 +669,7 @@ def build_summary(action_rows: list[dict], policy_rows: list[dict]) -> dict:
         "methodology": {
             "demand_model": (
                 "For each device/model, external demand is evaluated at "
-                "25/50/75/100% of that group's maximum measured capacity. "
+                "25/50/75/100% of that group's maximum measured MST. "
                 "Each mode is evaluated at demand_rps / mode_capacity_ips."
             ),
             "profile_estimation": (
@@ -678,13 +678,13 @@ def build_summary(action_rows: list[dict], policy_rows: list[dict]) -> dict:
             ),
             "dynamic_policy": (
                 "Choose the SLA-safe mode with the lowest estimated marginal "
-                "wall energy, equivalent to the lowest delta power at fixed demand."
+                "AC input energy, equivalent to the lowest delta power at fixed demand."
             ),
             "baseline_max_perf": (
-                "Evaluate the maximum-capacity mode at the same external demand."
+                "Evaluate the maximum-MST mode at the same external demand."
             ),
             "baseline_capacity_only": (
-                "Choose the lowest-capacity feasible mode using capacity only, "
+                "Choose the lowest-MST feasible mode using MST only, "
                 "without latency or energy awareness."
             ),
             "sla_threshold_ms": L_MAX_MS,
@@ -735,7 +735,7 @@ def build_summary(action_rows: list[dict], policy_rows: list[dict]) -> dict:
         "scope_limitations": [
             "This validates measured profiling and policy decision space, not online switching overhead.",
             "Demand-level evaluation uses interpolation between measured lambda profiles.",
-            "Invalid capacity cells from the full-DVFS build are outside this policy table.",
+            "Invalid MST cells from the full-DVFS build are outside this policy table.",
         ],
     }
 
@@ -758,12 +758,12 @@ def _plot_action_space(action_rows: list[dict]) -> str:
     ax.axvline(1.05, color="0.5", linestyle="--", linewidth=1.0)
     ax.axhline(0.5, color="0.5", linestyle="--", linewidth=1.0)
     ax.set_xscale("log")
-    ax.set_xlabel("capacity control span (max/min, log scale)")
-    ax.set_ylabel("capacity-load delta-power span (W)")
-    ax.set_title("Action-space validity: DVFS control span per device/model")
+    ax.set_xlabel("MST control span (max/min, log scale)")
+    ax.set_ylabel("MST-load delta-power span (W)")
+    ax.set_title("Action-space validity: power-mode control span per device/model")
     xlim = ax.get_xlim()
     ylim = ax.get_ylim()
-    ax.text(1.07, ylim[1] * 0.92, "no capacity\ncontrol",
+    ax.text(1.07, ylim[1] * 0.92, "no MST\ncontrol",
             fontsize=8, color="0.35", ha="left", va="top")
     ax.text(xlim[0] * 1.08, 0.9, "no delta-power control",
             fontsize=8, color="0.35", ha="left", va="bottom")
@@ -821,7 +821,7 @@ def _plot_selection_maps(policy_rows: list[dict]) -> list[str]:
         ax.set_xticklabels([f"{int(frac * 100)}%" for frac in DEMAND_FRACS])
         ax.set_yticks(range(len(devices)))
         ax.set_yticklabels(devices)
-        ax.set_xlabel("external demand (% of group max capacity) -> increasing")
+        ax.set_xlabel("external demand (% of group max MST) -> increasing")
         ax.set_title(f"Selected SLA-safe energy-aware mode - {model}")
         ax.set_facecolor("#ffffff")
         ax.grid(False)
@@ -906,8 +906,8 @@ def _plot_savings_vs_max(policy_rows: list[dict]) -> str:
         ax.set_xticklabels([f"{int(frac * 100)}%" for frac in DEMAND_FRACS])
         ax.set_yticks(range(len(devices)))
         ax.set_yticklabels(devices)
-        ax.set_xlabel("external demand (% of group max capacity)")
-    fig.suptitle("Estimated delta-power saving vs max measured-capacity baseline", fontsize=14)
+        ax.set_xlabel("external demand (% of group max MST)")
+    fig.suptitle("Estimated delta-power saving vs max measured-MST baseline", fontsize=14)
     fig.subplots_adjust(left=0.08, right=0.91, top=0.86, bottom=0.12, wspace=0.28)
     cax = fig.add_axes([0.93, 0.22, 0.015, 0.56])
     cbar = fig.colorbar(mappable, cax=cax)
@@ -979,7 +979,7 @@ def _plot_full_sweep_necessity(policy_rows: list[dict]) -> str:
     )
     ax.set_yticks(range(len(groups)))
     ax.set_yticklabels([f"{device}/{model}" for device, model in groups], fontsize=8)
-    ax.set_xlabel("external demand (% of group max capacity) -> increasing")
+    ax.set_xlabel("external demand (% of group max MST) -> increasing")
     ax.set_title("Full-sweep necessity across four demand levels")
     ax.legend(handles=_decision_legend_handles(), fontsize=7, ncol=3,
               loc="upper center", bbox_to_anchor=(0.5, -0.09), frameon=True)

@@ -1,9 +1,9 @@
 """
-Build T2 central artifact: capacity + serving-load power + CI per pair.
+Build T2 central artifact: maximum sustainable throughput (MST) + serving-load power + CI per pair.
 
-# T2: internal artifact stage label for the frozen capacity-power table.
-Central empirical artifact: capacity and power per device/model. It joins:
-  - capacity_measured.csv / capacity_dvfs_overrides.csv (capacity point estimate)
+# T2: internal artifact stage label for the frozen MST-power table.
+Central empirical artifact: MST and power per device/model. It joins:
+  - capacity_measured.csv / capacity_dvfs_overrides.csv (MST point estimate)
   - serving_power_measured.csv (serving-load power)
   - capacity_power_ci.csv (CI bounds from confirmation runs)
   - constants.py ACCURACY, SLO_INFEASIBLE (metadata)
@@ -62,7 +62,7 @@ def _f(v):
 
 def _load_bs1_power(path: Path) -> dict[tuple, dict]:
     """serving_power rows restricted to batch_size==1, keyed by
-    (device, model, policy). T2 is a bs=1 capacity-power anchor: bs>1 rows
+    (device, model, policy). T2 is a bs=1 MST-power anchor: bs>1 rows
     must never widen this join (a plain (d,m,p) key would last-write-win onto
     a bs>1 row). Legacy rows with no batch_size column are treated as bs=1."""
     if not path.exists():
@@ -83,7 +83,7 @@ def build_t2(policy: str) -> list[dict]:
     same statistic: the achieved-RPS distribution across the n=3 confirmation
     rounds (median / min / max). This keeps the point estimate inside its own
     range by construction. For SLO-infeasible pairs or pairs missing CI data,
-    we fall back to the binary-search-confirmed capacity in MEASURED_CAPACITY_*.
+    we fall back to the binary-search-confirmed MST in MEASURED_CAPACITY_*.
     """
     capacity_cap = MEASURED_CAPACITY_CAP if policy == "capacity" else MEASURED_CAPACITY_EINC
     # bs=1-only join: T2 is the frozen bs=1 anchor; bs>1 serving-power rows
@@ -119,7 +119,7 @@ def build_t2(policy: str) -> list[dict]:
         # binary-search-confirmed number only when CI data is missing.
         capacity_point = capacity_median if capacity_median is not None else binary_search_cap
 
-        # Recompute marginal wall energy against the T2 point estimate so the
+        # Recompute marginal AC input energy against the T2 point estimate so the
         # row is algebraically coherent: E = delta_w / capacity_point. The
         # pre-computed value in serving_power_measured.csv is anchored to the
         # binary-search mu, which differs from the CI median for some rows.

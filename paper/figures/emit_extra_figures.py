@@ -2,9 +2,9 @@
 """Emit two native-pgfplots figures for paper.tex from the released artifacts.
 No re-derivation; Table A is batch_size==1 only.
 
-  fleet_cloud.tex    Figure A: all 396 measured cells in the (p95, energy) plane,
-                     log-log, colored by segment, sized by load, 100 ms deadline.
-                     Pure raw measurement.
+  fleet_cloud.tex    Figure 1: EDP efficiency (inf/J) vs load group (% of MST),
+                     one panel per model, colored by device type; filled marker =
+                     SLO-feasible, open = infeasible. From the 396 measured cells.
   ranking_flip.tex   Device energy-rank slopegraph, isolated profiling vs serving,
                      one panel per model (decision_flip.csv). Shows that the
                      profile's best device is never the serving best, and that the
@@ -60,61 +60,87 @@ MODELS = [("mobilenet-v2-050", "MobileNet-V2 0.5"),
           ("efficientnet-b4", "EfficientNet-B4")]
 
 
+LOAD_RANK = {0.25: 1, 0.5: 2, 0.75: 3, 1.0: 4}
+# Per-device-type horizontal offset within a load group, and half-width of the
+# deterministic within-group spread (points ordered by y). Cosmetic jitter only;
+# the y value, load group, and feasibility are the measured data.
+SEG_XOFF = {"Server": -0.24, "Jetson": -0.08, "SB-NPU": 0.08, "SB-CPU": 0.24}
+FLEET_HW = 0.037
+FLEET_TITLES = {"mobilenet-v2-050": "MobileNet-V2-050",
+                "mobilenet-v2-100": "MobileNet-V2-100",
+                "efficientnet-b4": "EfficientNet-B4"}
+FLEET_LEGEND = ["SB-CPU", "SB-NPU", "Jetson", "Server"]
+
+
 def fig_fleet_cloud(rows):
-    """Two-column figure: one (p95, energy) panel per model, shared log-log axes."""
-    ps = [p for (_, _, _, p, _) in rows]
-    es = [e for (_, _, _, _, e) in rows]
-    pmin, pmax = min(ps), max(ps)
-    emin, emax = min(es), max(es)
-    xmin, xmax = pmin * 0.85, pmax * 1.08
-    ymin, ymax = emin * 0.85, emax * 1.1
-    L = [colordefs(FLEET_SEGS), r"\begin{tikzpicture}", r"\begin{groupplot}["]
+    """Figure 1: EDP efficiency (inf/J) vs load group (% of MST), one panel per
+    model, colored by device type; filled marker = SLO-feasible, open = infeasible.
+    EDP efficiency = 100 / (AC input energy per inf * p95 latency). Points within
+    each (model, load group, device type) are spread horizontally, ordered by y."""
+    per_model = defaultdict(lambda: defaultdict(list))
+    n_pts = n_infeas = 0
+    for seg, model, ld, p95, energy in rows:
+        rank = LOAD_RANK[round(ld, 2)]
+        y = DEADLINE / (energy * p95)
+        feasible = p95 <= DEADLINE
+        per_model[model][(rank, seg)].append((y, feasible))
+        n_pts += 1
+        n_infeas += 0 if feasible else 1
+    L = [colordefs(FLEET_SEGS)]
     a = L.append
-    a(r"  group style={group size=3 by 1, horizontal sep=0.35cm,")
+    leg = r" \qquad ".join(
+        rf"\tikz[baseline=-0.55ex]\draw[draw=white, line width=0.12pt, "
+        rf"fill={SEG_KEY[s]}] (0,0) circle (2.25pt);\,{SEG_LABEL[s]}"
+        for s in FLEET_LEGEND)
+    a(rf"{{\footnotesize\centering \textbf{{Device type:}}\quad {leg}\par}}")
+    a(r"\vspace{2pt}")
+    a(r"\begin{tikzpicture}")
+    a(r"\begin{groupplot}[")
+    a(r"  group style={group size=3 by 1, horizontal sep=0.20cm,")
     a(r"    ylabels at=edge left, yticklabels at=edge left},")
-    a(r"  width=0.345\textwidth, height=0.18\textwidth,")
-    a(r"  xmode=log, ymode=log,")
-    a(r"  xlabel={p95 latency (ms)}, ylabel={Marginal wall energy (J/inf.)},")
-    a(rf"  xmin={xmin:.1f}, xmax={xmax:.0f}, ymin={ymin:.4f}, ymax={ymax:.3f},")
-    a(r"  ymajorgrids=true, grid style={black!10},")
-    a(r"  title style={font=\footnotesize, yshift=-2pt},")
-    a(r"  label style={font=\footnotesize}, tick label style={font=\scriptsize},")
+    a(r"  width=0.334\textwidth, height=0.285\textwidth, clip=true,")
+    a(r"  ymode=log,")
+    a(r"  ylabel={EDP efficiency (inf/J)},")
+    a(r"  xmin=0.55, xmax=4.45, ymin=0.45, ymax=3000.0,")
+    a(r"  xtick={1,2,3,4}, xticklabels={25,50,75,100},")
+    a(r"  ytick={1,10,100,1000}, yticklabels={1,10,100,1000},")
+    a(r"  minor tick num=1,")
+    a(r"  ymajorgrids=true, grid style={black!12, densely dotted},")
+    a(r"  axis line style={black!60}, tick style={black!55},")
+    a(r"  title style={font=\small, yshift=-1pt},")
+    a(r"  label style={font=\small}, tick label style={font=\footnotesize},")
+    a(r"  ylabel style={yshift=-2pt}, xlabel style={yshift=2pt},")
     a(r"]")
-    for mkey, mlabel in MODELS:
-        a(rf"\nextgroupplot[title={{{mlabel}}}]")
-        # shade infeasible region p95 > deadline
-        a(rf"\addplot[draw=none, fill=black!6, forget plot] coordinates "
-          rf"{{({DEADLINE:g},{ymin:.4f}) ({xmax:.0f},{ymin:.4f}) "
-          rf"({xmax:.0f},{ymax:.3f}) ({DEADLINE:g},{ymax:.3f})}} \closedcycle;")
-        a(rf"\draw[dashed, black!55, line width=0.7pt] (axis cs:{DEADLINE:g},{ymin:.4f}) -- "
-          rf"(axis cs:{DEADLINE:g},{ymax:.3f});")
-        # one scatter per (segment, load) within this model
-        for seg in FLEET_SEGS:
-            for ld in [0.25, 0.5, 0.75, 1.0]:
-                pts = [(p, e) for (s, m, l, p, e) in rows
-                       if m == mkey and s == seg and l == ld]
-                if not pts:
-                    continue
-                coords = " ".join(f"({p:.1f},{e:.4f})" for (p, e) in pts)
-                a(rf"\addplot[only marks, mark=*, mark size={SIZE_OF[ld]}pt, "
-                  rf"color={SEG_KEY[seg]}, fill={SEG_KEY[seg]}, fill opacity=0.55, "
-                  rf"draw opacity=0.55, forget plot] coordinates {{{coords}}};")
+    for mkey, _ in MODELS:
+        head = rf"\nextgroupplot[title={{{FLEET_TITLES[mkey]}}}"
+        if mkey == "mobilenet-v2-100":
+            head += r", xlabel={Load group (\% of MST)}"
+        a(head + "]")
+        placed = defaultdict(lambda: {"filled": [], "open": []})
+        for (rank, seg), pts in per_model[mkey].items():
+            pts.sort(key=lambda t: t[0])
+            n = len(pts)
+            center = rank + SEG_XOFF[seg]
+            for i, (y, feasible) in enumerate(pts):
+                x = center if n == 1 else center - FLEET_HW + 2 * FLEET_HW * i / (n - 1)
+                placed[seg]["filled" if feasible else "open"].append((x, y))
+        for seg in FLEET_SEGS:  # filled markers first (the cloud)
+            fld = sorted(placed[seg]["filled"])
+            if fld:
+                coords = " ".join(f"({x:.3f},{y:.6f})" for x, y in fld)
+                a(rf"\addplot[only marks, mark=*, mark size=2.0pt, mark options="
+                  rf"{{fill={SEG_KEY[seg]}, fill opacity=0.82, draw=white, "
+                  rf"line width=0.16pt}}, forget plot] coordinates {{{coords}}};")
+        for seg in FLEET_SEGS:  # infeasible (open) markers on top
+            opn = sorted(placed[seg]["open"])
+            if opn:
+                coords = " ".join(f"({x:.3f},{y:.6f})" for x, y in opn)
+                a(rf"\addplot[only marks, mark=*, mark size=2.0pt, mark options="
+                  rf"{{fill=white, draw={SEG_KEY[seg]}, line width=0.55pt}}, "
+                  rf"forget plot] coordinates {{{coords}}};")
     a(r"\end{groupplot}")
-    a(r"\end{tikzpicture}")
-    # legend as plain LaTeX colored bullets, centered below (colors defined at the
-    # top of this file so they are in scope outside the tikzpicture)
-    a(r"\par\vspace{1pt}")
-    leg = r" \quad ".join(
-        rf"\textcolor{{{SEG_KEY[s]}}}{{$\bullet$}}\,{SEG_LABEL[s]}"
-        for s in LEGEND_SEGS)
-    a(rf"{{\footnotesize {leg}}}")
-    # size key: marker area encodes load fraction of capacity
-    sizes = r" \quad ".join(
-        rf"\tikz[baseline=-0.5ex]\draw[fill=black] (0,0) circle ({SIZE_OF[ld]}pt);\,{ld:g}"
-        for ld in [0.25, 0.5, 0.75, 1.0])
-    a(r"\par\vspace{1pt}")
-    a(rf"{{\footnotesize marker size $=$ load (fraction of capacity): {sizes}}}")
-    return "\n".join(L) + "\n", (pmin, pmax, emin, emax)
+    a(r"\end{tikzpicture}\par")
+    return "\n".join(L) + "\n", (n_pts, n_infeas)
 
 
 # --- ranking-flip slopegraph: isolated profile vs serving, per model ---------
@@ -245,7 +271,7 @@ def fig_savings(rows):
     L = [r"\begin{tikzpicture}", colordefs(["Server", "Jetson"]), r"\begin{axis}["]
     a = L.append
     a(r"  width=\columnwidth, height=0.50\columnwidth,")
-    a(r"  ylabel={Energy saved vs max-perf (\%)},")
+    a(r"  ylabel={AC input energy savings (\%)},")
     a(rf"  xmin=0, xmax={n+1}, ymin=0, ymax={vmax*1.12:.0f},")
     ticks = ",".join(str(i + 1) for i in range(n))
     labels = ",".join("{" + lab + "}" for (_, _, lab) in rows)
@@ -281,8 +307,7 @@ if __name__ == "__main__":
     texA, infoA = fig_fleet_cloud(A)
     texR, infoR = fig_ranking_flip(rf)
     texS, infoS = fig_savings(sv)
-    print(f"A ranges p95 {infoA[0]:.1f}-{infoA[1]:.1f}, energy {infoA[2]:.4f}-{infoA[3]:.3f} "
-          f"(span {infoA[3]/infoA[2]:.0f}x)")
+    print(f"fleet_cloud: {infoA[0]} points, {infoA[1]} infeasible (open markers)")
     for ml, (ib, sb, n) in infoR.items():
         print(f"  {ml}: iso-best={ib}  srv-best={sb}  n={n}")
     print(f"savings n={infoS[0]} median {infoS[1]:.1f}% max {infoS[2]:.1f}%")

@@ -1,7 +1,7 @@
 """
 S1-Capacity shared constants.
 
-Single source of truth for measured capacity, model accuracy,
+Single source of truth for measured maximum sustainable throughput (MST), model accuracy,
 SLO-infeasible pairs, and analytical correction factors.
 All values sourced from results/derived/capacity_measured.csv unless noted.
 """
@@ -22,12 +22,12 @@ CSV_CAPACITY_ANALYTICAL = CSV_DIR / "capacity_analytical.csv"
 CSV_CAPACITY_MEASURED = CSV_DIR / "capacity_measured.csv"
 CSV_CAPACITY_DVFS = CSV_DIR / "capacity_dvfs_overrides.csv"
 
-# --- DVFS policy names ---
-# Policy A (e_inc): DVFS mode that minimizes incremental energy per inference above idle.
-# Policy B (capacity): DVFS mode that maximizes sustained inference capacity.
+# --- Power-mode policy names ---
+# Policy A (e_inc): power mode that minimizes incremental energy per inference above idle.
+# Policy B (capacity): power mode that maximizes sustained throughput (MST).
 # e_inc: incremental energy per inference above idle (J/inf above idle baseline).
-POLICY_EINC = "e_inc"       # Policy A: E_inc-minimizing DVFS
-POLICY_CAPACITY = "capacity" # Policy B: Capacity-maximizing DVFS
+POLICY_EINC = "e_inc"       # Policy A: E_inc-minimizing power mode
+POLICY_CAPACITY = "capacity" # Policy B: MST-maximizing power mode
 DVFS_POLICIES = [POLICY_EINC, POLICY_CAPACITY]
 
 # --- Device/model lists ---
@@ -49,7 +49,7 @@ ACCURACY: dict[str, float] = {
     "efficientnet-b4": 0.732,
 }
 
-# --- SLO-infeasible pairs (service time > L_max at best DVFS) ---
+# --- SLO-infeasible pairs (service time > L_max at best power mode) ---
 SLO_INFEASIBLE: set[tuple[str, str]] = {
     ("jetson", "efficientnet-b4"),       # S1 load-test: p95 278ms
     ("lattepanda", "efficientnet-b4"),   # S1 load-test: p95 309ms
@@ -59,9 +59,9 @@ SLO_INFEASIBLE: set[tuple[str, str]] = {
     ("orangepi-npu", "efficientnet-b4"),   # S1 load-test: p95=111ms at 0.5rps (single-inference >> 100ms)
 }
 
-# --- Measured capacity (from S1-3 binary search, CSV authoritative) ---
+# --- Measured maximum sustainable throughput (MST) (from S1-3 binary search, CSV authoritative) ---
 # ips: inferences per second.
-# Policy A: E_inc-minimizing DVFS, 2026-04-18 (full-fleet power-annotated rerun).
+# Policy A: E_inc-minimizing power mode, 2026-04-18 (full-fleet power-annotated rerun).
 # All devices re-measured in 20260418T Phase 2 campaign; values sourced from
 # capacity_measured.csv rebuilt from power-annotated authoritative runs.
 MEASURED_CAPACITY_EINC: dict[tuple[str, str], float] = {
@@ -87,12 +87,12 @@ MEASURED_CAPACITY_EINC: dict[tuple[str, str], float] = {
     ("xavier", "mobilenet-v2-100"): 142.2,
 }
 
-# Policy B: Capacity-maximizing DVFS, 2026-04-18.
-# Only orin/effb4 (MAXN) and gpu-server/effb4 (1545MHz) have distinct cap-max
-# measurements; every other pair's hardware collapses to the same DVFS, so
-# Policy B capacity equals Policy A capacity.
+# Policy B: MST-maximizing power mode, 2026-04-18.
+# Only orin/effb4 (MAXN) and gpu-server/effb4 (1545MHz) have distinct MST-max
+# measurements; every other pair's hardware collapses to the same power mode, so
+# Policy B MST equals Policy A MST.
 MEASURED_CAPACITY_CAP: dict[tuple[str, str], float] = {
-    ("gpu-server", "efficientnet-b4"): 135.6,  # cap-max DVFS (1545MHz)
+    ("gpu-server", "efficientnet-b4"): 135.6,  # cap-max power mode (1545MHz)
     ("gpu-server", "mobilenet-v2-050"): 585.0,  # same as e_inc
     ("gpu-server", "mobilenet-v2-100"): 507.7,  # same as e_inc
     ("jetson", "mobilenet-v2-050"): 98.9,  # same as e_inc
@@ -104,7 +104,7 @@ MEASURED_CAPACITY_CAP: dict[tuple[str, str], float] = {
     ("orangepi-npu", "efficientnet-b4"): 0.0,  # same as e_inc (SLO-infeasible)
     ("orangepi-npu", "mobilenet-v2-050"): 222.7,  # same as e_inc (NPU, no DVFS)
     ("orangepi-npu", "mobilenet-v2-100"): 154.1,  # same as e_inc (NPU, no DVFS)
-    ("orin", "efficientnet-b4"): 81.6,  # cap-max DVFS (MAXN)
+    ("orin", "efficientnet-b4"): 81.6,  # cap-max power mode (MAXN)
     ("orin", "mobilenet-v2-050"): 390.6,  # same as e_inc
     ("orin", "mobilenet-v2-100"): 318.8,  # same as e_inc
     ("rasp5", "mobilenet-v2-050"): 43.0,  # same as e_inc
@@ -114,7 +114,7 @@ MEASURED_CAPACITY_CAP: dict[tuple[str, str], float] = {
     ("xavier", "mobilenet-v2-100"): 142.2,  # same as e_inc
 }
 
-# E_inc values for capacity-max DVFS (different from best-E_inc DVFS)
+# E_inc values for MST-max power mode (different from best-E_inc power mode)
 E_INC_CAP_OVERRIDE: dict[tuple[str, str], float] = {
     ("orin", "efficientnet-b4"): 0.197,     # MAXN: positive, not artifact
     ("gpu-server", "efficientnet-b4"): 1.623, # 1545MHz: +18% vs mode 4

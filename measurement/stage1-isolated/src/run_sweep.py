@@ -9,8 +9,8 @@ Data management: upsert mode. (device, model, batch_size, dvfs_mode) is the prim
 Usage:
     python3 src/run_sweep.py --devices orin           # re-measure orin only (others preserved)
     python3 src/run_sweep.py --all                    # all Shelly-connected devices
-    python3 src/run_sweep.py --devices orin --dvfs 0  # orin DVFS mode 0 only
-    python3 src/run_sweep.py --devices orin --all-dvfs  # iterate all configured DVFS modes for orin
+    python3 src/run_sweep.py --devices orin --dvfs 0  # orin power mode 0 only
+    python3 src/run_sweep.py --devices orin --all-dvfs  # iterate all configured power modes for orin
     python3 src/run_sweep.py --plan configs/sweeps/canonical_parallel.yaml --dry-run
     python3 src/run_sweep.py --all --fresh            # ignore existing data, start fresh
 """
@@ -400,7 +400,7 @@ def run_sweep(devices: dict, db_path: str, pcfg: dict, fresh: bool = False):
         ensure_bench_script(ssh, dev)
 
         for dvfs_mode in dvfs_modes:
-            print(f'  [{dev_name}] Apply DVFS mode {dvfs_mode}')
+            print(f'  [{dev_name}] Apply power mode {dvfs_mode}')
             apply_dvfs_mode(ssh, dev_name, dev, dvfs_mode)
             # Some Jetson nvpmodel transitions reboot the board and clear /tmp.
             # Re-deploy the benchmark script after each DVFS transition so
@@ -584,9 +584,9 @@ def main():
     parser.add_argument('--plan', help='YAML sweep plan path')
     parser.add_argument('--devices', nargs='+')
     parser.add_argument('--all', action='store_true', help='Shelly-connected devices only')
-    parser.add_argument('--dvfs', type=int, default=None, help='DVFS mode override')
+    parser.add_argument('--dvfs', type=int, default=None, help='power mode override')
     parser.add_argument('--all-dvfs', action='store_true',
-                        help='iterate all DVFS modes defined in device config')
+                        help='iterate all power modes defined in device config')
     parser.add_argument('--duration', type=float, default=None)
     parser.add_argument('--trials', type=int, default=None)
     parser.add_argument('--fresh', action='store_true', help='delete existing data for the device then re-measure')

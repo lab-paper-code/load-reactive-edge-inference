@@ -1,20 +1,20 @@
 # edge-inference-energy-grid
 
-Measurement grid and analysis pipeline for the paper "Load Moves the Energy-Optimal Configuration of Real-Time Edge Inference" (2026).
+Measurement grid and analysis pipeline for the paper "Characterizing Load-Dependent Energy-Optimal Configurations for Real-Time Edge Inference" (2026).
 
-The dataset covers nine heterogeneous edge devices running image-classification inference under Poisson serving load across four load levels and multiple DVFS configurations. The analysis identifies how the energy-optimal DVFS configuration shifts with load and quantifies the energy saving a load-reactive policy achieves over static baselines.
+The dataset covers nine heterogeneous edge devices running image-classification inference under Poisson serving load across four load levels and multiple power modes. The analysis identifies how the energy-optimal power mode shifts with load and quantifies the energy saving a load-reactive policy achieves over static baselines.
 
 ## What this repository contains
 
-- **data/stage1/**: isolated first-stage profiles: a pruned SQLite database (`eep_profiler.db`) recording single-stream energy, latency, and throughput per (device, model, DVFS mode) at batch size 1.
-- **data/stage2/raw/**: serving-load measurement records: 3960 load-sweep files (one per (device, model, DVFS mode, load fraction, repeat index)) plus 114 capacity-confirmation files (null load fraction and repeat index) from the May 2026 campaign.
+- **data/stage1/**: isolated first-stage profiles: a pruned SQLite database (`eep_profiler.db`) recording single-stream energy, latency, and throughput per (device, model, power mode) at batch size 1.
+- **data/stage2/raw/**: serving-load measurement records: 3960 load-sweep files (one per (device, model, power mode, load fraction, repeat index)) plus 114 maximum sustainable throughput (MST) confirmation files (null load fraction and repeat index) from the May 2026 campaign.
 - **data/derived/**: frozen derived CSVs produced by the reduction pipeline; these are the direct inputs to the paper figures and tables.
 - **analysis/**: reduction scripts that build the derived CSVs from raw data.
 - **paper/**: figure and table generation scripts that read from `data/derived/`.
 - **scripts/**: entry-point shell scripts for the two reproducibility tiers.
 - **measurement/**: serving and isolated measurement harness code (reference; not needed for reproduction). The harness is included to document how the measurements were taken. It references internal client and utility modules (for example `power_reader`, `power_trace`, `ssh`, `runtime_budget`) that are tied to our hardware and are not redistributed, so these files do not run as shipped.
 - **models/**: model export utilities (ONNX, RKNN).
-- **devices.csv**: hardware registry: codename, paper label, segment, accelerator, execution provider.
+- **devices.csv**: hardware registry: codename, paper label, device type, accelerator, execution provider.
 - **docs/**: data schema and provenance documentation.
 
 ## Scope

@@ -8,7 +8,7 @@ Joins:
 
 Produces:
   - results/derived/surrogate_contrast.csv, per (device, model, policy) row
-  # surrogate: isolated profile used as a serving-energy proxy.
+  # surrogate: isolated profile used as a pre-serving estimate of serving energy.
   # iso/srv: "iso" = isolated-profile side; "srv" = serving-load measured side.
   - results/derived/surrogate_contrast_summary.json, aggregate stats
 
@@ -18,7 +18,7 @@ Research question:
 Comparisons (per pair):
   - isolated E_inc (J/inf) vs marginal_wall_energy_j_per_inf (J/inf)
   - isolated idle_W vs warm_idle_W (serving-load)
-  - isolated active_W vs serving_W (serving-load at confirmed capacity)
+  - isolated active_W vs serving_W (serving-load at confirmed MST)
 
 Usage:
     python3 surrogate_contrast.py           # dry-run

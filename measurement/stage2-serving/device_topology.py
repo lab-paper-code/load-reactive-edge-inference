@@ -36,7 +36,7 @@ def device_port(device: str) -> int:
     return DEVICE_PORT.get(device, INFER_PORT)
 
 
-# --- Shelly hostnames (wall-power plug sources) ---
+# --- Shelly hostnames (AC input power plug sources) ---
 # All devices with Shelly plugs (regardless of profiler include_in_all flag;
 # power instrumentation eligibility is separate from profiler sweep scope).
 # Shelly plug hostnames are populated from your fleet's devices.yaml at runtime.

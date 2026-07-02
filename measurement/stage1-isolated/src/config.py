@@ -94,7 +94,7 @@ def default_dvfs_mode(device_name: str) -> int:
 
 
 def dvfs_mode_label(device_name: str, mode: int) -> str:
-    """Human-readable DVFS mode label (e.g. 'MODE_30W', '2100MHz')."""
+    """Human-readable power-mode label (e.g. 'MODE_30W', '2100MHz')."""
     cfg = get_device(device_name)
     modes = cfg.get('dvfs_modes', {})
     if modes and mode in modes:

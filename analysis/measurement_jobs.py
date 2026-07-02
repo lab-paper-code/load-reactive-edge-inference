@@ -195,7 +195,7 @@ def condition_label(job: MeasurementJob) -> str:
 
 
 def make_output_path(job: MeasurementJob) -> Path:
-    """Build the raw JSON path for a capacity-finding run."""
+    """Build the raw JSON path for a maximum sustainable throughput (MST) finding run."""
     name = (f"{_ts_tag()}_{job.device}_{_model_short(job.model)}_{condition_tag(job)}_"
             f"{_EP_SHORT.get(job.expected_ep, 'unk')}_v2.json")
     return RESULTS_RAW / name
@@ -218,7 +218,7 @@ def job_tag(job: MeasurementJob) -> str:
 
 
 def job_key(job: MeasurementJob) -> tuple[str, str, str, int | None, int]:
-    """Stable key preserving policy label, resolved DVFS mode, and batch width."""
+    """Stable key preserving policy label, resolved power mode, and batch width."""
     return (job.device, job.model, job.policy, job.dvfs_mode, job.batch_size)
 
 
@@ -229,13 +229,13 @@ def job_err(job: MeasurementJob, reason: str,
 
 
 # --- lambda-sweep configuration ---
-# lambda_frac: arrival rate as fraction of that mode's confirmed capacity.
+# lambda_frac: arrival rate as fraction of that mode's confirmed MST.
 # run_family: measurement campaign lineage (e.g. "full_dvfs", "policy_keyed").
 LAMBDA_FRACS_DEFAULT: tuple[float, ...] = (0.25, 0.5, 0.75, 1.0)
 N_RUNS_PER_CELL_DEFAULT: int = 3
 
 # Representative sub-sample for the λ-sweep main claim (Stage 5 of the
-# execution plan). Coverage: ≥ 2 pairs per fleet segment spanning
+# execution plan). Coverage: ≥ 2 pairs per device type spanning
 # light / medium / heavy models.
 REPRESENTATIVE_PAIRS: list[tuple[str, str, str]] = [
     # server-class
@@ -378,7 +378,7 @@ def iter_full_dvfs_jobs(devices: set[str] | None = None,
                         models: set[str] | None = None,
                         batch_sizes: dict[str, tuple[int, ...]] | None = None
                         ) -> list[MeasurementJob]:
-    """Generate the planned full-DVFS capacity matrix without mutating JOBS_ALL.
+    """Generate the planned full-DVFS MST matrix without mutating JOBS_ALL.
 
     `batch_sizes` is an optional device-scoped batch-width map. A device absent
     from the map (or `batch_sizes=None`) is enumerated at bs=1 only, so legacy

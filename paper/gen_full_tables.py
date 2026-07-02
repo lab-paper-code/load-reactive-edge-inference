@@ -83,8 +83,8 @@ def table_a():
     out.append(r"\begin{longtable}{@{}lll r *{4}{r r}@{}}")
     out.append(r"\caption{Table A. Full raw measurement grid: every measured "
                r"device--model--mode at four request loads expressed as a fraction "
-               r"of that mode's own confirmed capacity. Cells report marginal "
-               r"wall energy (J/inf, median) and p95 latency (ms, median). "
+               r"of that mode's own confirmed capacity. Cells report "
+               r"AC input energy (J/inf, median) and p95 latency (ms, median). "
                r"Gray p95 marks a cell over the 100\,ms deadline. "
                r"Source: \texttt{full\_dvfs\_lambda\_cell\_summary.csv} (batch\_size=1), "
                r"99 modes $\times$ 4 loads = 396 measured load-cells.}\\")
@@ -240,7 +240,7 @@ def main():
     doc.append(r"\begin{document}")
     doc.append(r"\section*{Full result tables (working artifact)}")
     doc.append(r"\noindent Generated from official derived artifacts with no re-derivation. "
-               r"Deadline p95 $\le 100$\,ms; loads $\{0.25,0.5,0.75,1.0\}$; wall-plug marginal energy. "
+               r"Deadline p95 $\le 100$\,ms; loads $\{0.25,0.5,0.75,1.0\}$; AC input energy. "
                r"$\dagger$ = SLA-unsafe (p95 over deadline). "
                r"Table~A load = fraction of each mode's own capacity (raw measurement); "
                r"Table~B load = fraction of the group's max capacity (the oracle-sheet axis).\par\medskip")

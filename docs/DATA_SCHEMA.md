@@ -2,6 +2,8 @@
 
 This document describes the column definitions for the three paper-facing derived CSVs, the raw JSON measurement record schema, the isolated-profile database columns used by the pipeline, and the pipeline execution order.
 
+> **Terminology note.** Column, field, and file names retain their original tokens (`wall`, `capacity`, `dvfs`, `segment`) for compatibility with the shipped data and pipeline. The descriptions below use the terminology of the accompanying paper: *AC input* power/energy (measured at the wall plug) for `wall`, *maximum sustainable throughput (MST)* for `capacity`, *power mode* for `dvfs`, and *device type* for `segment`.
+
 ---
 
 ## Derived CSVs
@@ -16,58 +18,58 @@ One row per (device, model, dvfs_mode, lambda_frac) cell. This is the primary me
 |---|---|---|
 | device | string | Device codename, matches `devices.csv` |
 | model | string | Model identifier |
-| dvfs_mode | integer | DVFS configuration index |
-| dvfs_mode_label | string | Human-readable DVFS configuration label (e.g. "fixed", "max-n") |
+| dvfs_mode | integer | Power-mode index |
+| dvfs_mode_label | string | Human-readable power-mode label (e.g. "fixed", "max-n") |
 | condition_tag | string | Internal condition tag from the run family |
-| segment | string | Device segment: Server, Jetson, or Small-board |
-| capacity_ips | float | Confirmed serving capacity in inferences per second |
-| lambda_frac | float | Load fraction of confirmed capacity (0.25, 0.50, 0.75, 1.00) |
-| target_rps | float | Target request rate derived from capacity and lambda_frac |
+| segment | string | Device type: Server, Jetson, or Small-board |
+| capacity_ips | float | Confirmed maximum sustainable throughput (MST) in inferences per second |
+| lambda_frac | float | Load fraction of confirmed MST (0.25, 0.50, 0.75, 1.00) |
+| target_rps | float | Target request rate derived from MST and lambda_frac |
 | n_runs | integer | Number of measurement runs in this cell |
 | achieved_rps_median | float | Median achieved throughput across runs (inferences per second) |
 | achieved_rps_min | float | Minimum achieved throughput across runs |
 | achieved_rps_max | float | Maximum achieved throughput across runs |
 | p95_latency_ms_median | float | Median 95th-percentile latency across runs (ms) |
 | p95_latency_ms_max | float | Maximum 95th-percentile latency across runs (ms) |
-| warm_idle_w_median | float | Median warm-idle wall power across runs (W) |
-| serving_w_median | float | Median serving wall power across runs (W) |
-| delta_w_median | float | Median incremental wall power (serving minus idle) across runs (W) |
-| marginal_wall_energy_j_per_inf_median | float | Median marginal wall energy per inference (J) |
-| marginal_wall_energy_j_per_inf_min | float | Minimum marginal wall energy per inference across runs (J) |
-| marginal_wall_energy_j_per_inf_max | float | Maximum marginal wall energy per inference across runs (J) |
+| warm_idle_w_median | float | Median warm-idle AC input power across runs (W) |
+| serving_w_median | float | Median serving AC input power across runs (W) |
+| delta_w_median | float | Median incremental AC input power (serving minus idle) across runs (W) |
+| marginal_wall_energy_j_per_inf_median | float | Median marginal AC input energy per inference (J) |
+| marginal_wall_energy_j_per_inf_min | float | Minimum marginal AC input energy per inference across runs (J) |
+| marginal_wall_energy_j_per_inf_max | float | Maximum marginal AC input energy per inference across runs (J) |
 | batch_size | integer | Batch size used; canonical value is 1 for all shipped rows |
 
 ### scheduler_policy_eval.csv
 
-One row per (device, model, demand level) scenario. Compares three DVFS selection policies: the load-reactive dynamic policy, the max-performance policy, and the capacity-only policy. Column groups are prefixed by `dynamic_`, `max_perf_`, and `capacity_only_` respectively.
+One row per (device, model, demand level) scenario. Compares three power-mode selection policies: the load-reactive dynamic policy, the max-performance policy, and the capacity-only policy. Column groups are prefixed by `dynamic_`, `max_perf_`, and `capacity_only_` respectively.
 
 | Column | Type | Description |
 |---|---|---|
 | device | string | Device codename |
 | model | string | Model identifier |
-| demand_frac_of_group_max | float | Demand as fraction of the group's maximum capacity |
+| demand_frac_of_group_max | float | Demand as fraction of the group's maximum MST |
 | demand_rps | float | Demand in requests per second |
-| group_max_capacity_ips | float | Maximum capacity across the device group |
-| n_modes | integer | Total number of DVFS modes profiled for this (device, model) |
-| n_feasible_modes | integer | Modes with sufficient capacity to serve the demand |
+| group_max_capacity_ips | float | Maximum MST across the device group |
+| n_modes | integer | Total number of power modes profiled for this (device, model) |
+| n_feasible_modes | integer | Modes with sufficient MST to serve the demand |
 | n_sla_safe_modes | integer | Feasible modes where estimated p95 latency is within SLA |
 | policy_status | string | Evaluation outcome: "ok", "no_feasible_mode", "no_sla_safe_mode", or similar |
-| {policy}_dvfs_mode | integer | Selected DVFS mode index for this policy |
+| {policy}_dvfs_mode | integer | Selected power-mode index for this policy |
 | {policy}_dvfs_mode_label | string | Human-readable label of the selected mode |
 | {policy}_semantic_rank | integer | Rank of the selected mode by energy within feasible modes (1 = lowest energy) |
 | {policy}_mode_category | string | Category of the selected mode (e.g. "low-power", "balanced", "max-perf") |
-| {policy}_load_frac_on_mode | float | Load fraction of the selected mode's capacity |
+| {policy}_load_frac_on_mode | float | Load fraction of the selected mode's MST |
 | {policy}_nearest_measured_lambda_frac | float | Nearest measured lambda_frac used for interpolation |
-| {policy}_delta_w_est | float | Estimated incremental wall power for the selected mode (W) |
-| {policy}_serving_w_est | float | Estimated total serving wall power for the selected mode (W) |
+| {policy}_delta_w_est | float | Estimated incremental AC input power for the selected mode (W) |
+| {policy}_serving_w_est | float | Estimated total serving AC input power for the selected mode (W) |
 | {policy}_p95_latency_ms_est | float | Estimated p95 latency for the selected mode (ms) |
-| {policy}_energy_j_per_inf_est | float | Estimated marginal wall energy per inference for the selected mode (J) |
+| {policy}_energy_j_per_inf_est | float | Estimated marginal AC input energy per inference for the selected mode (J) |
 | {policy}_sla_safe | boolean | Whether the selected mode satisfies the p95 latency SLA |
 | {policy}_interp_status | string | Interpolation method used: "exact", "interpolated", or "extrapolated" |
 | dynamic_delta_w_saving_vs_max_perf_pct | float | Incremental power saving of dynamic over max-perf policy (%) |
 | dynamic_energy_saving_vs_max_perf_pct | float | Energy-per-inference saving of dynamic over max-perf policy (%) |
 | dynamic_delta_w_saving_vs_capacity_only_pct | float | Incremental power saving of dynamic over capacity-only policy (%) |
-| decision_second_best_dvfs_mode | integer | Second-best DVFS mode by energy for the dynamic decision |
+| decision_second_best_dvfs_mode | integer | Second-best power mode by energy for the dynamic decision |
 | decision_second_best_dvfs_mode_label | string | Label of the second-best mode |
 | decision_delta_w_margin | float | Absolute delta_w gap between best and second-best mode (W) |
 | decision_delta_w_margin_pct | float | Relative delta_w gap (%) |
@@ -78,13 +80,13 @@ One row per (device, model, demand level) scenario. Compares three DVFS selectio
 
 ### decision_flip.csv
 
-One row per (device, model, policy) pair. Records whether the top-1 energy-optimal DVFS configuration differs between isolated profiling and serving-load measurement.
+One row per (device, model, policy) pair. Records whether the top-1 energy-optimal power mode differs between isolated profiling and serving-load measurement.
 
 | Column | Type | Description |
 |---|---|---|
 | device | string | Device codename |
 | model | string | Model identifier |
-| policy | string | DVFS policy / configuration label |
+| policy | string | Power-mode policy / configuration label |
 | iso_e_j_per_inf | float | Isolated-profile energy per inference (J) |
 | srv_e_j_per_inf | float | Serving-load measured energy per inference (J) |
 | iso_rank | integer | Energy rank under isolated condition (1 = lowest energy) |
@@ -97,7 +99,7 @@ One row per (device, model, policy) pair. Records whether the top-1 energy-optim
 
 ## Raw JSON schema (data/stage2/raw/)
 
-Each file records one measurement run. Files produced by the lambda sweep follow the naming pattern `{timestamp}_{run_id}_{device}_{model}_{dvfs_mode_label}_{ep}_l{load_frac}_r{repeat}_lsweep.json` (for example, `20260508T144012+0900_718_lattepanda_mob050_dvfs0_cpu_l025_r0_lsweep.json`). Capacity-confirmation files (null load fraction and repeat index) follow a similar pattern with `_v2.json`.
+Each file records one measurement run. Files produced by the lambda sweep follow the naming pattern `{timestamp}_{run_id}_{device}_{model}_{dvfs_mode_label}_{ep}_l{load_frac}_r{repeat}_lsweep.json` (for example, `20260508T144012+0900_718_lattepanda_mob050_dvfs0_cpu_l025_r0_lsweep.json`). MST-confirmation files (null load fraction and repeat index) follow a similar pattern with `_v2.json`.
 
 The fields below are the primary fields consumed by the reduction pipeline.
 
@@ -105,15 +107,15 @@ The fields below are the primary fields consumed by the reduction pipeline.
 |---|---|---|
 | device | string | Device codename |
 | model | string | Model identifier |
-| dvfs_mode | integer | DVFS configuration index |
-| dvfs_mode_label | string | Human-readable DVFS label |
-| lambda_frac | float or null | Load fraction of confirmed capacity; null in capacity-confirmation files |
+| dvfs_mode | integer | Power-mode index |
+| dvfs_mode_label | string | Human-readable power-mode label |
+| lambda_frac | float or null | Load fraction of confirmed MST; null in MST-confirmation files |
 | run_idx | integer or null | Repeat index within this (device, model, dvfs_mode, lambda_frac) cell |
 | batch_size | integer or null | Batch size; null encodes the canonical value of 1 in all shipped records |
 | power_trace.status | string | "ok" if the power measurement completed without error; otherwise an error description |
-| power_trace.summary.warm_idle_median_watts | float | Median wall power during the warm idle window before load (W) |
-| power_trace.summary.serving_median_watts | float | Median wall power during the active serving window (W) |
-| power_trace.summary.delta_median_watts | float | Median incremental wall power: serving minus idle (W) |
+| power_trace.summary.warm_idle_median_watts | float | Median AC input power during the warm idle window before load (W) |
+| power_trace.summary.serving_median_watts | float | Median AC input power during the active serving window (W) |
+| power_trace.summary.delta_median_watts | float | Median incremental AC input power: serving minus idle (W) |
 
 ---
 
@@ -126,11 +128,11 @@ The SQLite database has one table, `profiles`, with one row per (device, model, 
 | device | string | Device codename (PK component) |
 | model | string | Model identifier (PK component) |
 | batch_size | integer | Batch size (PK component); pipeline filters to batch_size = 1 |
-| dvfs_mode | integer | DVFS mode index (PK component) |
+| dvfs_mode | integer | Power-mode index (PK component) |
 | ep | string | Execution provider (e.g. "CPUExecutionProvider", "TensorrtExecutionProvider") |
 | latency_ms_p95 | float | 95th-percentile single-inference latency (ms) |
 | throughput_ips | float | Single-stream throughput in inferences per second |
-| p_wall_avg_w | float | Mean wall power during active inference (W) |
+| p_wall_avg_w | float | Mean AC input power during active inference (W) |
 | watts_idle | float | Idle power estimate from the measurement run (W) |
 | watts_idle_true | float | Idle power estimate with thermal drift correction (W); preferred over watts_idle when available |
 | energy_inc_per_inf_j | float | Incremental energy per inference, older computation path (J) |

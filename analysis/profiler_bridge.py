@@ -20,7 +20,7 @@ from src.db import get_connection
 
 
 def load_best_batch1_profiles(db_path: str) -> list[dict]:
-    """Load one best-DVFS profile row per (device, model) for S1 consumers."""
+    """Load one best-power-mode profile row per (device, model) for S1 consumers."""
     conn = get_connection(db_path)
     device_list = ",".join(f"'{d}'" for d in DEVICES)
     rows = conn.execute(f"""

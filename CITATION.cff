@@ -9,7 +9,7 @@ authors:
 license: CC-BY-4.0
 preferred-citation:
   type: article
-  title: "Load Moves the Energy-Optimal Configuration of Real-Time Edge Inference"
+  title: "Characterizing Load-Dependent Energy-Optimal Configurations for Real-Time Edge Inference"
   year: 2026
   authors:
     - name: "Anonymous (under double-blind review)"
